@@ -95,6 +95,13 @@
     @keyframes blink { 50% { opacity:.2; } }
     .rec-time { font-variant-numeric:tabular-nums; font-weight:600; }
     audio { width:100%; margin-top:12px; }
+    .already {
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+      background:var(--soft); border:1px solid #c9d9ea; border-radius:10px;
+      padding:12px 14px; margin:0 0 22px;
+    }
+    .already button { padding:10px 16px; font-size:15px; }
+    .divider { border:0; border-top:1px solid var(--line); margin:26px 0 4px; }
     .person-list { list-style:none; padding:0; margin:0 0 18px; }
     .person-list li {
       display:flex; align-items:center; gap:10px; border:1px solid var(--line);
@@ -133,11 +140,49 @@
       <ul class="person-list" id="personList"></ul>
       <div class="button-row">
         <button type="button" class="secondary" id="addPersonButton">+ Register a new person</button>
+        <button type="button" class="secondary" id="pickerAlreadyButton">Already registered? Add yourself</button>
       </div>
-      <p class="small" style="margin-top:16px">
-        Already registered on another phone or computer? Open your personal link on this
-        device and you will be added to this list.
+    </section>
+
+    <!-- ============ ALREADY REGISTERED ============ -->
+    <section class="card hidden" id="signInCard">
+      <button type="button" class="link" id="signInBackButton" style="margin-bottom:12px">← Back</button>
+      <h2>Already registered?</h2>
+      <p class="intro">
+        You do not need to register again. Get your personal link and this device
+        will remember you.
       </p>
+
+      <h3>Email me my personal link</h3>
+      <form id="linkRequestForm"
+            action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
+            method="post"
+            target="submissionFrame"
+            accept-charset="UTF-8">
+        <input type="hidden" name="action" value="requestLink">
+        <input type="hidden" name="formElapsedMs" id="linkElapsedMs">
+        <div class="hidden" aria-hidden="true">
+          <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <div class="field">
+          <label for="linkEmail">The email address you registered with</label>
+          <input id="linkEmail" name="email" type="email" autocomplete="email" required maxlength="160">
+        </div>
+        <button type="submit" id="linkRequestButton">Email me my link</button>
+        <div id="linkStatus" class="status" role="status" aria-live="polite"></div>
+      </form>
+
+      <hr class="divider">
+      <h3>Or paste your personal link</h3>
+      <p class="small" style="margin-top:-4px">
+        If you saved your link (for example on WhatsApp), copy it and paste it here.
+      </p>
+      <div class="linkbox">
+        <input id="pasteLink" autocomplete="off" aria-label="Paste your personal link"
+               placeholder="https://anwaraj001.github.io/purgi-language-recorder/#c=…">
+        <button type="button" id="pasteLinkButton">Open</button>
+      </div>
+      <div id="pasteStatus" class="status" role="status" aria-live="polite"></div>
     </section>
 
     <!-- ============ NAME FOR A PERSONAL-LINK SIGN-IN ============ -->
@@ -155,6 +200,10 @@
     <!-- ============ REGISTRATION ============ -->
     <section class="card hidden" id="registrationCard">
       <button type="button" class="link hidden" id="backToListButton" style="margin-bottom:12px">← Back to the list of contributors</button>
+      <div class="already">
+        <span><strong>Already registered?</strong> You do not need to register again.</span>
+        <button type="button" class="secondary" id="alreadyButton">Get my personal link</button>
+      </div>
       <h2>Contributor Registration</h2>
       <p class="intro">
         Register as a volunteer contributor to help document پُرگی / པུར་གི.
@@ -237,10 +286,6 @@
         <button id="registerButton" type="submit">Register as a contributor</button>
         <div id="regStatus" class="status" role="status" aria-live="polite"></div>
       </form>
-      <p class="small" style="margin-top:18px">
-        Already registered on another phone or computer? Open the personal link you saved
-        when you registered, and this device will remember you.
-      </p>
     </section>
 
     <!-- ============ REGISTERED ============ -->
@@ -391,7 +436,7 @@
     const OLD_STORAGE_KEY = "purgiContributor";   // single-person storage from the earlier version
 
     const $ = function (id) { return document.getElementById(id); };
-    const cards = ["pickerCard", "nameCard", "registrationCard", "registeredCard",
+    const cards = ["pickerCard", "nameCard", "signInCard", "registrationCard", "registeredCard",
                    "contributionCard", "savedCard"];
 
     /* ---------- Contributors remembered on this device ---------- */
@@ -447,17 +492,29 @@
     let people = loadPeople();
     let contributor = null;   // the person currently contributing
 
+    // Reads "c=…&k=…" from a personal link (whole URL, or just the part after #).
+    function parseLink(text) {
+      text = String(text || "").trim();
+      const hashAt = text.indexOf("#");
+      const fragment = hashAt >= 0 ? text.slice(hashAt + 1) : text;
+      const params = new URLSearchParams(fragment);
+      const id = String(params.get("c") || "").trim().toUpperCase();
+      const key = String(params.get("k") || "").trim().toLowerCase();
+      return (isValidId(id) && isValidKey(key)) ? { id: id, key: key } : null;
+    }
+
+    function addFromLink(parsed) {
+      const known = findPerson(parsed.id);
+      const person = upsertPerson(parsed.id, parsed.key, "");
+      return { person: person, needsName: !known || !known.name };
+    }
+
     // A personal link (#c=…&k=…) adds that person to this device, then is removed from the address bar.
     function readPersonalLink() {
       if (!location.hash || location.hash.length < 5) return null;
-      const params = new URLSearchParams(location.hash.slice(1));
-      const id = String(params.get("c") || "").toUpperCase();
-      const key = String(params.get("k") || "").toLowerCase();
+      const parsed = parseLink(location.hash);
       try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
-      if (!isValidId(id) || !isValidKey(key)) return null;
-      const known = findPerson(id);
-      const person = upsertPerson(id, key, "");
-      return { person: person, needsName: !known || !known.name };
+      return parsed ? addFromLink(parsed) : null;
     }
 
     function show(cardId) {
@@ -568,6 +625,7 @@
       const result = event.data.data || {};
       if (kind === "register") handleRegistrationResult(result);
       else if (kind === "contribute") handleContributionResult(result);
+      else if (kind === "requestLink") handleLinkRequestResult(result);
     });
 
     function setStatus(box, kind, text) {
@@ -614,12 +672,72 @@
       } else if (result.success) {
         setStatus(regStatus, "bad",
           "You are registered, but this page could not link your device. Please contact the research team.");
+      } else if (result.alreadyRegistered) {
+        setStatus(regStatus, "info", result.message);
       } else {
         setStatus(regStatus, "bad", result.message || "Registration could not be completed. Please try again.");
       }
     }
 
     $("startContributingButton").addEventListener("click", showContribution);
+
+    /* ---------- Already registered? ---------- */
+
+    const linkForm = $("linkRequestForm");
+    const linkButton = $("linkRequestButton");
+    const linkStatus = $("linkStatus");
+    let linkOpenedAt = Date.now();
+
+    function showSignIn() {
+      contributor = null;
+      setStatus(linkStatus, "", "");
+      setStatus($("pasteStatus"), "", "");
+      $("pasteLink").value = "";
+      linkOpenedAt = Date.now();
+      show("signInCard");
+    }
+
+    function resetLinkButton() {
+      linkButton.disabled = false;
+      linkButton.textContent = "Email me my link";
+    }
+
+    linkForm.addEventListener("submit", function () {
+      setStatus(linkStatus, "", "");
+      linkButton.disabled = true;
+      linkButton.textContent = "Sending…";
+      // Typing an email is quick, so count time since the screen opened (min 3 s on the server).
+      $("linkElapsedMs").value = String(Math.max(Date.now() - linkOpenedAt, 0));
+      startPending("requestLink", RESPONSE_TIMEOUT_MS, function () {
+        resetLinkButton();
+        setStatus(linkStatus, "bad", "We did not receive a reply from the server. Please check your internet connection and try again.");
+      });
+    });
+
+    function handleLinkRequestResult(result) {
+      resetLinkButton();
+      if (result.success) {
+        setStatus(linkStatus, "good", result.message);
+      } else {
+        setStatus(linkStatus, "bad", result.message || "We could not send your link. Please try again.");
+      }
+    }
+
+    $("pasteLinkButton").addEventListener("click", function () {
+      const parsed = parseLink($("pasteLink").value);
+      if (!parsed) {
+        setStatus($("pasteStatus"), "bad",
+          "That does not look like a personal link. Please copy the whole link and paste it again.");
+        return;
+      }
+      openFromLink(addFromLink(parsed));
+    });
+
+    $("alreadyButton").addEventListener("click", showSignIn);
+    $("pickerAlreadyButton").addEventListener("click", showSignIn);
+    $("signInBackButton").addEventListener("click", function () {
+      if (people.length) showPicker(); else showRegistration();
+    });
 
     /* ---------- Audio recorder ---------- */
 

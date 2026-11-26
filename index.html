@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17365d">
+  <meta name="referrer" content="no-referrer">
   <title>پُرگی | པུར་གི — Language Documentation Project</title>
   <style>
     :root {
       --navy:#17365d; --blue:#245b91; --ink:#182536; --muted:#617184;
       --line:#d9e1ea; --paper:#ffffff; --bg:#f3f6fa; --good:#176b43;
-      --bad:#a12a2a; --soft:#eaf1f8;
+      --bad:#a12a2a; --soft:#eaf1f8; --rec:#c0392b;
     }
     * { box-sizing:border-box; }
     body {
@@ -26,8 +27,8 @@
       gap:18px; font-size:clamp(30px,6vw,48px); font-weight:700;
       color:#142f65; line-height:1.6;
     }
-    .language-name .urdu { font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic",serif; }
-    .language-name .tibetan { font-family:"Noto Sans Tibetan","Jomolhari","Microsoft Himalaya",serif; }
+    .urdu { font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic",serif; }
+    .tibetan { font-family:"Noto Sans Tibetan","Jomolhari","Microsoft Himalaya",serif; }
     h1 { font-size:21px; margin:10px 0 3px; color:var(--navy); }
     .subtitle { margin:0; color:var(--muted); }
     .card {
@@ -35,16 +36,20 @@
       padding:26px; margin:18px 0; box-shadow:0 4px 18px rgba(22,45,72,.04);
     }
     h2 { margin:0 0 8px; font-size:22px; color:var(--navy); }
+    h3 { margin:22px 0 10px; font-size:17px; color:var(--navy); }
     .intro { color:var(--muted); margin:0 0 22px; }
     .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
     .field { margin-bottom:16px; }
     label, legend { display:block; font-weight:600; margin-bottom:7px; }
+    .hint { display:block; font-size:13px; color:var(--muted); margin:-4px 0 7px; }
     .required { color:#a12a2a; }
-    input, select {
+    input, select, textarea {
       width:100%; border:1px solid #bdc9d6; border-radius:9px;
       padding:12px 13px; background:white; color:var(--ink); font:inherit;
     }
-    input:focus, select:focus { outline:3px solid #d9e8f8; border-color:var(--blue); }
+    textarea { min-height:60px; resize:vertical; }
+    textarea.urdu, textarea.tibetan { font-size:20px; line-height:1.9; }
+    input:focus, select:focus, textarea:focus { outline:3px solid #d9e8f8; border-color:var(--blue); }
     fieldset { border:0; padding:0; margin:0 0 16px; }
     .radio-row { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
     .radio-row label, .checkline { display:flex; align-items:flex-start; gap:9px; font-weight:400; }
@@ -60,11 +65,36 @@
     }
     button:hover { background:var(--blue); }
     button:disabled { opacity:.6; cursor:wait; }
+    button.secondary { background:#fff; color:var(--navy); border:1px solid var(--navy); }
+    button.secondary:hover { background:var(--soft); }
+    button.link { background:none; color:var(--blue); padding:0; font-weight:400; font-size:14px; text-decoration:underline; }
+    .button-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .status { display:none; padding:13px 15px; border-radius:9px; margin-top:16px; }
     .status.good { display:block; color:var(--good); background:#e8f5ee; }
     .status.bad { display:block; color:var(--bad); background:#fbecec; }
+    .status.info { display:block; color:var(--navy); background:var(--soft); }
     .small { font-size:13px; color:var(--muted); }
     .hidden { display:none !important; }
+    .big-id { font-size:26px; font-weight:700; color:var(--navy); word-break:break-word; margin:6px 0 14px; }
+    .who {
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+      background:var(--soft); border-radius:9px; padding:10px 14px; margin-bottom:18px; font-size:14px;
+    }
+    .linkbox { display:flex; gap:8px; margin:10px 0 4px; }
+    .linkbox input { font-size:13px; padding:9px 10px; }
+    .linkbox button { padding:9px 14px; font-size:14px; white-space:nowrap; }
+    details.save-link { margin-top:16px; font-size:14px; }
+    details.save-link summary { cursor:pointer; color:var(--blue); }
+    .recorder {
+      border:1px solid var(--line); border-radius:12px; padding:16px; background:#fbfcfe;
+    }
+    .rec-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .rec-btn { background:var(--rec); }
+    .rec-btn:hover { background:#a93226; }
+    .rec-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--rec); margin-right:6px; animation:blink 1s infinite; }
+    @keyframes blink { 50% { opacity:.2; } }
+    .rec-time { font-variant-numeric:tabular-nums; font-weight:600; }
+    audio { width:100%; margin-top:12px; }
     footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
     @media (max-width:650px) {
       .page { margin:16px auto; padding:0 12px 28px; }
@@ -85,11 +115,12 @@
       <p class="subtitle">Volunteer registration and language documentation</p>
     </header>
 
-    <section class="card" id="registrationCard">
+    <!-- ============ REGISTRATION ============ -->
+    <section class="card hidden" id="registrationCard">
       <h2>Contributor Registration</h2>
       <p class="intro">
         Register as a volunteer contributor to help document پُرگی / པུར་གི.
-        Registration is open to adults aged 18 and above.
+        Registration is open to adults aged 18 and above. You register only once.
       </p>
 
       <form id="registrationForm"
@@ -101,7 +132,7 @@
         <input type="hidden" name="adultConfirmed" value="yes">
         <input type="hidden" name="consentScope"
           value="Private audio; anonymised linguistic data may be used in publications and shared datasets; withdrawal requests subject to publication/distribution limits.">
-        <input type="hidden" name="formElapsedMs" id="formElapsedMs">
+        <input type="hidden" name="formElapsedMs" id="regElapsedMs">
         <div class="hidden" aria-hidden="true">
           <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
         </div>
@@ -165,18 +196,142 @@
           administrative record. Your linguistic contributions will use a
           Contributor ID rather than your name.
         </p>
-        <button id="submitButton" type="submit">Register as a contributor</button>
-        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <button id="registerButton" type="submit">Register as a contributor</button>
+        <div id="regStatus" class="status" role="status" aria-live="polite"></div>
       </form>
+      <p class="small" style="margin-top:18px">
+        Already registered on another phone or computer? Open the personal link you saved
+        when you registered, and this device will remember you.
+      </p>
     </section>
 
-    <section class="card hidden" id="successCard">
+    <!-- ============ REGISTERED ============ -->
+    <section class="card hidden" id="registeredCard">
       <h2>Registration successful</h2>
       <p>Your permanent Contributor ID is:</p>
-      <p id="contributorId" style="font-size:26px;font-weight:700;color:#17365d;word-break:break-word"></p>
-      <button type="button" id="copyIdButton">Copy Contributor ID</button>
-      <p>Please save this ID. You will need it whenever you submit a Purgi word or sentence.</p>
-      <p class="small">Keep your Contributor ID private. It links your contributions to your registration record.</p>
+      <p id="registeredId" class="big-id"></p>
+      <p>
+        This device will now remember you, so you can contribute as many words and
+        sentences as you like without registering or typing your details again.
+      </p>
+      <p class="small">
+        <strong>Using another phone or computer later?</strong> Save this personal link
+        (for example, send it to yourself on WhatsApp or email). Opening it on any device
+        lets you contribute from there. Keep it private.
+      </p>
+      <div class="linkbox">
+        <input id="registeredLink" readonly aria-label="Your personal link">
+        <button type="button" class="secondary" data-copy="registeredLink">Copy link</button>
+      </div>
+      <div class="button-row" style="margin-top:18px">
+        <button type="button" id="startContributingButton">Start contributing →</button>
+      </div>
+    </section>
+
+    <!-- ============ CONTRIBUTION ============ -->
+    <section class="card hidden" id="contributionCard">
+      <div class="who">
+        <span>Contributing as <strong id="whoId"></strong></span>
+        <button type="button" class="link" id="notMeButton">Not you? Sign out on this device</button>
+      </div>
+
+      <h2>Contribute a Purgi word or sentence</h2>
+      <p class="intro">
+        Submit <strong>one word or one sentence</strong> at a time. Write it in as many
+        scripts as you can, give its meaning, and record how it is pronounced.
+      </p>
+
+      <form id="contributionForm"
+            action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
+            method="post"
+            target="submissionFrame"
+            accept-charset="UTF-8"
+            novalidate>
+        <input type="hidden" name="action" value="contribute">
+        <input type="hidden" name="contributorId" id="conContributorId">
+        <input type="hidden" name="accessKey" id="conAccessKey">
+        <input type="hidden" name="formElapsedMs" id="conElapsedMs">
+        <input type="hidden" name="hasAudio" id="hasAudio" value="no">
+        <input type="hidden" name="audio" id="audioData" disabled>
+        <input type="hidden" name="mimeType" id="audioMime">
+        <input type="hidden" name="durationSeconds" id="audioDuration">
+        <div class="hidden" aria-hidden="true">
+          <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <h3>The Purgi word or sentence</h3>
+        <div class="field">
+          <label for="roman">Roman script <span class="required">*</span></label>
+          <span class="hint">How it sounds, written in English letters</span>
+          <input id="roman" name="roman" maxlength="500" autocomplete="off">
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="persoArabic">Perso-Arabic (Urdu) script</label>
+            <textarea id="persoArabic" name="persoArabic" class="urdu" lang="ur" dir="rtl" maxlength="500"></textarea>
+          </div>
+          <div class="field">
+            <label for="tibetan">Tibetan script (<span class="tibetan" lang="bo">བོད་ཡིག</span>)</label>
+            <textarea id="tibetan" name="tibetan" class="tibetan" lang="bo" maxlength="500"></textarea>
+          </div>
+        </div>
+
+        <h3>Meaning</h3>
+        <p class="small" style="margin-top:-6px">
+          Give at least one: a meaning, or the Purgi entry in Urdu or Tibetan script.
+        </p>
+        <div class="grid">
+          <div class="field">
+            <label for="english">English meaning</label>
+            <textarea id="english" name="english" maxlength="500"></textarea>
+          </div>
+          <div class="field">
+            <label for="urduHindi">Urdu / Hindi meaning</label>
+            <textarea id="urduHindi" name="urduHindi" maxlength="500"></textarea>
+          </div>
+        </div>
+
+        <h3>Pronunciation</h3>
+        <div class="recorder">
+          <p class="small" style="margin-top:0">
+            Say the word or sentence clearly, in a quiet place. Maximum 60 seconds.
+          </p>
+          <div class="rec-row">
+            <button type="button" class="rec-btn" id="recordButton">● Record</button>
+            <button type="button" class="hidden" id="stopButton">■ Stop</button>
+            <button type="button" class="secondary hidden" id="discardButton">Delete &amp; record again</button>
+            <span id="recState" class="small"></span>
+          </div>
+          <audio id="playback" controls class="hidden"></audio>
+        </div>
+
+        <div class="button-row" style="margin-top:22px">
+          <button id="contributeButton" type="submit">Submit</button>
+        </div>
+        <div id="conStatus" class="status" role="status" aria-live="polite"></div>
+      </form>
+
+      <details class="save-link">
+        <summary>Contribute from another phone or computer</summary>
+        <p class="small">
+          Open this personal link on the other device. Keep it private; anyone with it
+          can contribute under your Contributor ID.
+        </p>
+        <div class="linkbox">
+          <input id="contributionLink" readonly aria-label="Your personal link">
+          <button type="button" class="secondary" data-copy="contributionLink">Copy link</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============ CONTRIBUTION SAVED ============ -->
+    <section class="card hidden" id="savedCard">
+      <h2>Thank you, your contribution was saved</h2>
+      <p>Contribution ID: <strong id="savedId"></strong></p>
+      <p id="savedAudioNote" class="small"></p>
+      <div class="button-row" style="margin-top:18px">
+        <button type="button" id="anotherButton">Submit another response</button>
+      </div>
     </section>
 
     <footer>
@@ -184,48 +339,85 @@
     </footer>
   </main>
 
-  <iframe name="submissionFrame" id="submissionFrame" title="Registration response" class="hidden"></iframe>
+  <iframe name="submissionFrame" id="submissionFrame" title="Submission response" class="hidden"></iframe>
 
   <script>
-    const form = document.getElementById("registrationForm");
-    const button = document.getElementById("submitButton");
-    const statusBox = document.getElementById("status");
-    const elapsedField = document.getElementById("formElapsedMs");
-    const pageLoadedAt = Date.now();
-    const frame = document.getElementById("submissionFrame");
-    let waitingForResponse = false;
-    let responseTimer = null;
-    const RESPONSE_TIMEOUT_MS = 30000;
+  (function () {
+    "use strict";
 
-    function resetButton() {
-      button.disabled = false;
-      button.textContent = "Register as a contributor";
+    const RESPONSE_TIMEOUT_MS = 30000;   // registration
+    const UPLOAD_TIMEOUT_MS = 90000;     // contributions may carry audio
+    const MAX_RECORD_SECONDS = 60;
+    const STORAGE_KEY = "purgiContributor";
+
+    const $ = function (id) { return document.getElementById(id); };
+    const cards = ["registrationCard", "registeredCard", "contributionCard", "savedCard"];
+
+    /* ---------- Remembered contributor (this device) ---------- */
+
+    function loadContributor() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+        if (saved && isValidId(saved.id) && isValidKey(saved.key)) return saved;
+      } catch (e) {}
+      return null;
+    }
+    function saveContributor(id, key) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: id, key: key })); } catch (e) {}
+      contributor = { id: id, key: key };
+    }
+    function forgetContributor() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      contributor = null;
+    }
+    function isValidId(id) { return /^PUR-C\d{4,}$/.test(String(id || "")); }
+    function isValidKey(key) { return /^[a-f0-9]{64}$/.test(String(key || "")); }
+    function personalLink(c) {
+      return location.origin + location.pathname +
+        "#c=" + encodeURIComponent(c.id) + "&k=" + encodeURIComponent(c.key);
     }
 
-    form.addEventListener("submit", function () {
-      statusBox.className = "status";
-      statusBox.textContent = "";
-      button.disabled = true;
-      button.textContent = "Submitting…";
-      waitingForResponse = true;
-      // Time spent on the form, measured entirely on this device (immune to clock differences).
-      elapsedField.value = String(Date.now() - pageLoadedAt);
+    // A personal link (#c=…&k=…) signs this device in, then is removed from the address bar.
+    function readPersonalLink() {
+      if (!location.hash || location.hash.length < 5) return;
+      const params = new URLSearchParams(location.hash.slice(1));
+      const id = String(params.get("c") || "").toUpperCase();
+      const key = String(params.get("k") || "").toLowerCase();
+      if (isValidId(id) && isValidKey(key)) saveContributor(id, key);
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    }
 
-      // Never leave the button stuck: if the backend reply does not arrive, recover.
-      clearTimeout(responseTimer);
-      responseTimer = setTimeout(function () {
-        if (!waitingForResponse) return;
-        waitingForResponse = false;
-        resetButton();
-        statusBox.className = "status bad";
-        statusBox.textContent =
-          "We did not receive a confirmation from the server. Your registration may still " +
-          "have been recorded, so please do not register again yet. Contact the research team " +
-          "with your email address to obtain your Contributor ID.";
-      }, RESPONSE_TIMEOUT_MS);
-    });
+    let contributor = loadContributor();
+    readPersonalLink();
 
-    // Apps Script serves its HTML from a googleusercontent.com sandbox frame.
+    function show(cardId) {
+      cards.forEach(function (c) { $(c).classList.toggle("hidden", c !== cardId); });
+      window.scrollTo(0, 0);
+    }
+
+    function showContribution() {
+      $("whoId").textContent = contributor.id;
+      $("contributionLink").value = personalLink(contributor);
+      resetContributionForm();
+      show("contributionCard");
+    }
+
+    /* ---------- Talking to Apps Script (hidden iframe + postMessage) ---------- */
+
+    let pending = null; // { kind: "register" | "contribute", timer }
+
+    function startPending(kind, timeoutMs, onTimeout) {
+      clearPending();
+      pending = { kind: kind, timer: setTimeout(function () {
+        if (!pending) return;
+        pending = null;
+        onTimeout();
+      }, timeoutMs) };
+    }
+    function clearPending() {
+      if (pending) clearTimeout(pending.timer);
+      pending = null;
+    }
     function isTrustedBackendOrigin(origin) {
       return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/.test(origin) ||
              origin === "https://script.google.com";
@@ -234,26 +426,318 @@
     window.addEventListener("message", function (event) {
       if (!isTrustedBackendOrigin(event.origin)) return;
       if (!event.data || event.data.type !== "PURGI_BACKEND_RESULT") return;
+      if (!pending) return;
+      const kind = pending.kind;
+      clearPending();
       const result = event.data.data || {};
-      if (!waitingForResponse) return;
-      waitingForResponse = false;
-      clearTimeout(responseTimer);
-      resetButton();
-
-      if (result.success) {
-        document.getElementById("registrationCard").classList.add("hidden");
-        document.getElementById("successCard").classList.remove("hidden");
-        document.getElementById("contributorId").textContent = result.contributorId;
-        document.getElementById("copyIdButton").onclick = function () {
-          navigator.clipboard.writeText(result.contributorId).then(function () {
-            this.textContent = "Copied";
-          }.bind(this));
-        };
-      } else {
-        statusBox.className = "status bad";
-        statusBox.textContent = result.message || "Registration could not be completed. Please try again.";
-      }
+      if (kind === "register") handleRegistrationResult(result);
+      else if (kind === "contribute") handleContributionResult(result);
     });
+
+    function setStatus(box, kind, text) {
+      box.className = kind ? "status " + kind : "status";
+      box.textContent = text || "";
+    }
+
+    /* ---------- Registration ---------- */
+
+    const regForm = $("registrationForm");
+    const regButton = $("registerButton");
+    const regStatus = $("regStatus");
+    let regOpenedAt = Date.now();
+
+    regForm.addEventListener("submit", function () {
+      setStatus(regStatus, "", "");
+      regButton.disabled = true;
+      regButton.textContent = "Submitting…";
+      $("regElapsedMs").value = String(Date.now() - regOpenedAt);
+      startPending("register", RESPONSE_TIMEOUT_MS, function () {
+        resetRegisterButton();
+        setStatus(regStatus, "bad",
+          "We did not receive a confirmation from the server. Your registration may still " +
+          "have been recorded, so please do not register again yet. Contact the research team " +
+          "with your email address to obtain your Contributor ID.");
+      });
+    });
+
+    function resetRegisterButton() {
+      regButton.disabled = false;
+      regButton.textContent = "Register as a contributor";
+    }
+
+    function handleRegistrationResult(result) {
+      resetRegisterButton();
+      if (result.success && isValidId(result.contributorId) && isValidKey(result.accessKey)) {
+        saveContributor(result.contributorId, result.accessKey);
+        regForm.reset();
+        $("registeredId").textContent = result.contributorId;
+        $("registeredLink").value = personalLink(contributor);
+        show("registeredCard");
+      } else if (result.success) {
+        setStatus(regStatus, "bad",
+          "You are registered, but this page could not link your device. Please contact the research team.");
+      } else {
+        setStatus(regStatus, "bad", result.message || "Registration could not be completed. Please try again.");
+      }
+    }
+
+    $("startContributingButton").addEventListener("click", showContribution);
+
+    /* ---------- Audio recorder ---------- */
+
+    const recordButton = $("recordButton");
+    const stopButton = $("stopButton");
+    const discardButton = $("discardButton");
+    const recState = $("recState");
+    const playback = $("playback");
+
+    let mediaRecorder = null, mediaStream = null, chunks = [];
+    let recording = null;            // { blob, mime, seconds }
+    let recStartedAt = 0, recTick = null, recAutoStop = null;
+
+    function pickMimeType() {
+      if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return "";
+      const options = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/mp4"];
+      for (let i = 0; i < options.length; i++) {
+        if (MediaRecorder.isTypeSupported(options[i])) return options[i];
+      }
+      return "";
+    }
+
+    function formatSeconds(s) {
+      s = Math.floor(s);
+      return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+    }
+
+    recordButton.addEventListener("click", async function () {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+        recState.textContent = "This browser cannot record audio. Please use Chrome, Firefox, Edge or Safari.";
+        return;
+      }
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true }
+        });
+      } catch (err) {
+        recState.textContent = "Microphone access was blocked. Please allow the microphone for this site and try again.";
+        return;
+      }
+      const mime = pickMimeType();
+      const options = { audioBitsPerSecond: 96000 };
+      if (mime) options.mimeType = mime;
+      try {
+        mediaRecorder = new MediaRecorder(mediaStream, options);
+      } catch (e) {
+        mediaRecorder = new MediaRecorder(mediaStream);
+      }
+      chunks = [];
+      mediaRecorder.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+      mediaRecorder.onstop = finishRecording;
+      mediaRecorder.start();
+      recStartedAt = Date.now();
+
+      recordButton.classList.add("hidden");
+      discardButton.classList.add("hidden");
+      stopButton.classList.remove("hidden");
+      playback.classList.add("hidden");
+      recState.innerHTML = '<span class="rec-dot"></span>Recording <span class="rec-time">0:00</span>';
+      recTick = setInterval(function () {
+        const t = recState.querySelector(".rec-time");
+        if (t) t.textContent = formatSeconds((Date.now() - recStartedAt) / 1000);
+      }, 250);
+      recAutoStop = setTimeout(stopRecording, MAX_RECORD_SECONDS * 1000);
+    });
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
+    }
+    stopButton.addEventListener("click", stopRecording);
+
+    function releaseMicrophone() {
+      clearInterval(recTick); clearTimeout(recAutoStop);
+      if (mediaStream) mediaStream.getTracks().forEach(function (t) { t.stop(); });
+      mediaStream = null;
+    }
+
+    function finishRecording() {
+      const seconds = (Date.now() - recStartedAt) / 1000;
+      releaseMicrophone();
+      const type = (mediaRecorder && mediaRecorder.mimeType) || chunks[0] && chunks[0].type || "audio/webm";
+      const blob = new Blob(chunks, { type: type });
+      mediaRecorder = null;
+      stopButton.classList.add("hidden");
+      if (!blob.size) {
+        recording = null;
+        recordButton.classList.remove("hidden");
+        recState.textContent = "Nothing was recorded. Please try again.";
+        return;
+      }
+      recording = { blob: blob, mime: type.split(";")[0].trim().toLowerCase(), seconds: Math.round(seconds * 10) / 10 };
+      if (playback.src) URL.revokeObjectURL(playback.src);
+      playback.src = URL.createObjectURL(blob);
+      playback.classList.remove("hidden");
+      discardButton.classList.remove("hidden");
+      recState.textContent = "Recorded " + formatSeconds(seconds) + ". Listen to check it, then submit.";
+    }
+
+    function clearRecording() {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.onstop = null;
+        mediaRecorder.stop();
+      }
+      mediaRecorder = null;
+      releaseMicrophone();
+      recording = null;
+      if (playback.src) { URL.revokeObjectURL(playback.src); playback.removeAttribute("src"); }
+      playback.classList.add("hidden");
+      stopButton.classList.add("hidden");
+      discardButton.classList.add("hidden");
+      recordButton.classList.remove("hidden");
+      recState.textContent = "";
+    }
+    discardButton.addEventListener("click", clearRecording);
+
+    function blobToBase64(blob) {
+      return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function () { resolve(String(reader.result).split(",")[1] || ""); };
+        reader.onerror = function () { reject(reader.error); };
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    /* ---------- Contribution ---------- */
+
+    const conForm = $("contributionForm");
+    const conButton = $("contributeButton");
+    const conStatus = $("conStatus");
+    let conOpenedAt = Date.now();
+
+    function resetContributionForm() {
+      conForm.reset();
+      clearRecording();
+      $("audioData").value = "";
+      $("audioData").disabled = true;
+      $("hasAudio").value = "no";
+      setStatus(conStatus, "", "");
+      resetContributeButton();
+      conOpenedAt = Date.now();
+    }
+
+    function resetContributeButton() {
+      conButton.disabled = false;
+      conButton.textContent = "Submit";
+    }
+
+    function val(id) { return $(id).value.trim(); }
+
+    conForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (pending) return;
+      if (!contributor) { show("registrationCard"); return; }
+
+      if (!val("roman")) {
+        setStatus(conStatus, "bad", "Please write the Purgi word or sentence in Roman script.");
+        $("roman").focus();
+        return;
+      }
+      if (!val("english") && !val("urduHindi") && !val("tibetan") && !val("persoArabic")) {
+        setStatus(conStatus, "bad", "Please give a meaning, or write the entry in Urdu or Tibetan script.");
+        return;
+      }
+      if (mediaRecorder) {
+        setStatus(conStatus, "bad", "Please stop the recording before submitting.");
+        return;
+      }
+      if (!recording && !confirm("You have not recorded the pronunciation. Submit without audio?")) {
+        return;
+      }
+
+      conButton.disabled = true;
+      conButton.textContent = recording ? "Uploading…" : "Submitting…";
+      setStatus(conStatus, "", "");
+
+      $("conContributorId").value = contributor.id;
+      $("conAccessKey").value = contributor.key;
+      if (recording) {
+        try {
+          $("audioData").value = await blobToBase64(recording.blob);
+        } catch (e) {
+          resetContributeButton();
+          setStatus(conStatus, "bad", "The recording could not be prepared. Please record it again.");
+          return;
+        }
+        $("audioData").disabled = false;
+        $("hasAudio").value = "yes";
+        $("audioMime").value = recording.mime;
+        $("audioDuration").value = String(recording.seconds);
+      } else {
+        $("audioData").value = "";
+        $("audioData").disabled = true;
+        $("hasAudio").value = "no";
+        $("audioMime").value = "";
+        $("audioDuration").value = "";
+      }
+      $("conElapsedMs").value = String(Date.now() - conOpenedAt);
+
+      startPending("contribute", UPLOAD_TIMEOUT_MS, function () {
+        resetContributeButton();
+        setStatus(conStatus, "bad",
+          "We did not receive a confirmation from the server. Please check your internet " +
+          "connection. Your entry may already have been saved, so wait a minute before submitting it again.");
+      });
+      conForm.submit();
+    });
+
+    function handleContributionResult(result) {
+      resetContributeButton();
+      $("audioData").value = "";       // free memory
+      $("audioData").disabled = true;
+      if (result.success) {
+        $("savedId").textContent = result.contributionId || "";
+        $("savedAudioNote").textContent = result.audioSaved
+          ? "Your pronunciation recording was saved with this entry."
+          : "This entry was saved without an audio recording.";
+        clearRecording();
+        show("savedCard");
+      } else {
+        setStatus(conStatus, "bad", result.message || "Your contribution could not be saved. Please try again.");
+      }
+    }
+
+    $("anotherButton").addEventListener("click", showContribution);
+
+    $("notMeButton").addEventListener("click", function () {
+      if (!confirm("Sign out on this device? To contribute here again you will need your personal link.")) return;
+      forgetContributor();
+      clearRecording();
+      regOpenedAt = Date.now();
+      show("registrationCard");
+    });
+
+    /* ---------- Copy buttons ---------- */
+
+    document.querySelectorAll("[data-copy]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        const input = $(button.getAttribute("data-copy"));
+        const done = function () {
+          button.textContent = "Copied";
+          setTimeout(function () { button.textContent = "Copy link"; }, 2000);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(input.value).then(done, function () { input.select(); });
+        } else {
+          input.select();
+          try { document.execCommand("copy"); done(); } catch (e) {}
+        }
+      });
+    });
+
+    /* ---------- Start ---------- */
+
+    if (contributor) showContribution();
+    else show("registrationCard");
+  })();
   </script>
 </body>
 </html>

@@ -95,6 +95,17 @@
     @keyframes blink { 50% { opacity:.2; } }
     .rec-time { font-variant-numeric:tabular-nums; font-weight:600; }
     audio { width:100%; margin-top:12px; }
+    .person-list { list-style:none; padding:0; margin:0 0 18px; }
+    .person-list li {
+      display:flex; align-items:center; gap:10px; border:1px solid var(--line);
+      border-radius:10px; padding:6px 12px 6px 6px; margin-bottom:10px; background:#fff;
+    }
+    .person-list .pick {
+      flex:1; text-align:left; background:var(--soft); color:var(--navy);
+      display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+    }
+    .person-list .pick:hover { background:#dce8f5; }
+    .person-list .pick .pid { font-size:13px; font-weight:400; color:var(--muted); }
     footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
     @media (max-width:650px) {
       .page { margin:16px auto; padding:0 12px 28px; }
@@ -115,8 +126,35 @@
       <p class="subtitle">Volunteer registration and language documentation</p>
     </header>
 
+    <!-- ============ WHO IS CONTRIBUTING (shared devices) ============ -->
+    <section class="card hidden" id="pickerCard">
+      <h2>Who is contributing?</h2>
+      <p class="intro">Choose your name. Your words will be saved under your Contributor ID.</p>
+      <ul class="person-list" id="personList"></ul>
+      <div class="button-row">
+        <button type="button" class="secondary" id="addPersonButton">+ Register a new person</button>
+      </div>
+      <p class="small" style="margin-top:16px">
+        Already registered on another phone or computer? Open your personal link on this
+        device and you will be added to this list.
+      </p>
+    </section>
+
+    <!-- ============ NAME FOR A PERSONAL-LINK SIGN-IN ============ -->
+    <section class="card hidden" id="nameCard">
+      <h2>Welcome, <span id="nameCardId"></span></h2>
+      <p>This device now remembers you. Type the name you want to see in the
+        <em>Who is contributing?</em> list, so you can pick yourself next time.</p>
+      <div class="field">
+        <label for="deviceName">Your name (kept only on this device)</label>
+        <input id="deviceName" maxlength="60" autocomplete="name">
+      </div>
+      <button type="button" id="saveNameButton">Continue →</button>
+    </section>
+
     <!-- ============ REGISTRATION ============ -->
     <section class="card hidden" id="registrationCard">
+      <button type="button" class="link hidden" id="backToListButton" style="margin-bottom:12px">← Back to the list of contributors</button>
       <h2>Contributor Registration</h2>
       <p class="intro">
         Register as a volunteer contributor to help document پُرگی / པུར་གི.
@@ -231,8 +269,8 @@
     <!-- ============ CONTRIBUTION ============ -->
     <section class="card hidden" id="contributionCard">
       <div class="who">
-        <span>Contributing as <strong id="whoId"></strong></span>
-        <button type="button" class="link" id="notMeButton">Not you? Sign out on this device</button>
+        <span>Contributing as <strong id="whoName"></strong> <span id="whoId" class="small"></span></span>
+        <button type="button" class="link" id="switchButton">Not you? Switch person</button>
       </div>
 
       <h2>Contribute a Purgi word or sentence</h2>
@@ -331,6 +369,7 @@
       <p id="savedAudioNote" class="small"></p>
       <div class="button-row" style="margin-top:18px">
         <button type="button" id="anotherButton">Submit another response</button>
+        <button type="button" class="secondary" id="savedSwitchButton">Switch person</button>
       </div>
     </section>
 
@@ -348,55 +387,152 @@
     const RESPONSE_TIMEOUT_MS = 30000;   // registration
     const UPLOAD_TIMEOUT_MS = 90000;     // contributions may carry audio
     const MAX_RECORD_SECONDS = 60;
-    const STORAGE_KEY = "purgiContributor";
+    const STORAGE_KEY = "purgiContributors";      // everyone registered on this device
+    const OLD_STORAGE_KEY = "purgiContributor";   // single-person storage from the earlier version
 
     const $ = function (id) { return document.getElementById(id); };
-    const cards = ["registrationCard", "registeredCard", "contributionCard", "savedCard"];
+    const cards = ["pickerCard", "nameCard", "registrationCard", "registeredCard",
+                   "contributionCard", "savedCard"];
 
-    /* ---------- Remembered contributor (this device) ---------- */
+    /* ---------- Contributors remembered on this device ---------- */
 
-    function loadContributor() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-        if (saved && isValidId(saved.id) && isValidKey(saved.key)) return saved;
-      } catch (e) {}
-      return null;
-    }
-    function saveContributor(id, key) {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ id: id, key: key })); } catch (e) {}
-      contributor = { id: id, key: key };
-    }
-    function forgetContributor() {
-      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-      contributor = null;
-    }
     function isValidId(id) { return /^PUR-C\d{4,}$/.test(String(id || "")); }
     function isValidKey(key) { return /^[a-f0-9]{64}$/.test(String(key || "")); }
-    function personalLink(c) {
+
+    function loadPeople() {
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); } catch (e) { list = []; }
+      if (!Array.isArray(list)) list = [];
+      list = list.filter(function (p) { return p && isValidId(p.id) && isValidKey(p.key); });
+      try {
+        const old = JSON.parse(localStorage.getItem(OLD_STORAGE_KEY) || "null");
+        if (old && isValidId(old.id) && isValidKey(old.key) &&
+            !list.some(function (p) { return p.id === old.id; })) {
+          list.push({ id: old.id, key: old.key, name: "" });
+        }
+        localStorage.removeItem(OLD_STORAGE_KEY);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      } catch (e) {}
+      return list;
+    }
+    function savePeople() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(people)); } catch (e) {}
+    }
+    function findPerson(id) {
+      for (let i = 0; i < people.length; i++) if (people[i].id === id) return people[i];
+      return null;
+    }
+    function upsertPerson(id, key, name) {
+      let person = findPerson(id);
+      if (person) {
+        person.key = key;
+        if (name) person.name = name;
+      } else {
+        person = { id: id, key: key, name: name || "" };
+        people.push(person);
+      }
+      savePeople();
+      return person;
+    }
+    function removePerson(id) {
+      people = people.filter(function (p) { return p.id !== id; });
+      savePeople();
+    }
+    function displayName(p) { return p.name || p.id; }
+    function personalLink(p) {
       return location.origin + location.pathname +
-        "#c=" + encodeURIComponent(c.id) + "&k=" + encodeURIComponent(c.key);
+        "#c=" + encodeURIComponent(p.id) + "&k=" + encodeURIComponent(p.key);
     }
 
-    // A personal link (#c=…&k=…) signs this device in, then is removed from the address bar.
+    let people = loadPeople();
+    let contributor = null;   // the person currently contributing
+
+    // A personal link (#c=…&k=…) adds that person to this device, then is removed from the address bar.
     function readPersonalLink() {
-      if (!location.hash || location.hash.length < 5) return;
+      if (!location.hash || location.hash.length < 5) return null;
       const params = new URLSearchParams(location.hash.slice(1));
       const id = String(params.get("c") || "").toUpperCase();
       const key = String(params.get("k") || "").toLowerCase();
-      if (isValidId(id) && isValidKey(key)) saveContributor(id, key);
       try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+      if (!isValidId(id) || !isValidKey(key)) return null;
+      const known = findPerson(id);
+      const person = upsertPerson(id, key, "");
+      return { person: person, needsName: !known || !known.name };
     }
-
-    let contributor = loadContributor();
-    readPersonalLink();
 
     function show(cardId) {
       cards.forEach(function (c) { $(c).classList.toggle("hidden", c !== cardId); });
       window.scrollTo(0, 0);
     }
 
+    function showStart() {
+      if (people.length === 0) showRegistration();
+      else if (people.length === 1) { contributor = people[0]; showContribution(); }
+      else showPicker();
+    }
+
+    function showPicker() {
+      contributor = null;
+      clearRecording();
+      if (people.length === 0) { showRegistration(); return; }
+      const list = $("personList");
+      list.textContent = "";
+      people.forEach(function (p) {
+        const li = document.createElement("li");
+        const pick = document.createElement("button");
+        pick.type = "button";
+        pick.className = "pick";
+        const nameLine = document.createElement("span");
+        nameLine.textContent = displayName(p);
+        pick.appendChild(nameLine);
+        if (p.name) {
+          const idLine = document.createElement("span");
+          idLine.className = "pid";
+          idLine.textContent = p.id;
+          pick.appendChild(idLine);
+        }
+        pick.addEventListener("click", function () { contributor = p; showContribution(); });
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "link";
+        remove.textContent = "Remove";
+        remove.setAttribute("aria-label", "Remove " + displayName(p) + " from this device");
+        remove.addEventListener("click", function () {
+          if (!confirm("Remove " + displayName(p) + " from this device? Their contributions are kept. " +
+                       "To use this device again they will need their personal link.")) return;
+          removePerson(p.id);
+          showPicker();
+        });
+        li.appendChild(pick);
+        li.appendChild(remove);
+        list.appendChild(li);
+      });
+      show("pickerCard");
+    }
+
+    function showNameCard(person) {
+      $("nameCardId").textContent = person.id;
+      $("deviceName").value = person.name || "";
+      $("saveNameButton").onclick = function () {
+        const name = $("deviceName").value.trim().slice(0, 60);
+        if (name) { person.name = name; savePeople(); }
+        contributor = person;
+        showContribution();
+      };
+      show("nameCard");
+    }
+
+    function showRegistration() {
+      contributor = null;
+      $("backToListButton").classList.toggle("hidden", people.length === 0);
+      regOpenedAt = Date.now();
+      show("registrationCard");
+    }
+
     function showContribution() {
-      $("whoId").textContent = contributor.id;
+      if (!contributor) { showStart(); return; }
+      $("whoName").textContent = displayName(contributor);
+      $("whoId").textContent = contributor.name ? "(" + contributor.id + ")" : "";
       $("contributionLink").value = personalLink(contributor);
       resetContributionForm();
       show("contributionCard");
@@ -445,8 +581,10 @@
     const regButton = $("registerButton");
     const regStatus = $("regStatus");
     let regOpenedAt = Date.now();
+    let registeringName = "";
 
     regForm.addEventListener("submit", function () {
+      registeringName = $("name").value.trim().slice(0, 60);
       setStatus(regStatus, "", "");
       regButton.disabled = true;
       regButton.textContent = "Submitting…";
@@ -468,7 +606,7 @@
     function handleRegistrationResult(result) {
       resetRegisterButton();
       if (result.success && isValidId(result.contributorId) && isValidKey(result.accessKey)) {
-        saveContributor(result.contributorId, result.accessKey);
+        contributor = upsertPerson(result.contributorId, result.accessKey, registeringName);
         regForm.reset();
         $("registeredId").textContent = result.contributorId;
         $("registeredLink").value = personalLink(contributor);
@@ -634,7 +772,7 @@
     conForm.addEventListener("submit", async function (event) {
       event.preventDefault();
       if (pending) return;
-      if (!contributor) { show("registrationCard"); return; }
+      if (!contributor) { showStart(); return; }
 
       if (!val("roman")) {
         setStatus(conStatus, "bad", "Please write the Purgi word or sentence in Roman script.");
@@ -707,13 +845,10 @@
 
     $("anotherButton").addEventListener("click", showContribution);
 
-    $("notMeButton").addEventListener("click", function () {
-      if (!confirm("Sign out on this device? To contribute here again you will need your personal link.")) return;
-      forgetContributor();
-      clearRecording();
-      regOpenedAt = Date.now();
-      show("registrationCard");
-    });
+    $("switchButton").addEventListener("click", showPicker);
+    $("savedSwitchButton").addEventListener("click", showPicker);
+    $("addPersonButton").addEventListener("click", showRegistration);
+    $("backToListButton").addEventListener("click", showPicker);
 
     /* ---------- Copy buttons ---------- */
 
@@ -735,8 +870,21 @@
 
     /* ---------- Start ---------- */
 
-    if (contributor) showContribution();
-    else show("registrationCard");
+    function openFromLink(linked) {
+      if (linked.needsName) showNameCard(linked.person);
+      else { contributor = linked.person; showContribution(); }
+    }
+
+    // A personal link pasted into a tab that already has this page open only changes the #part.
+    window.addEventListener("hashchange", function () {
+      if (pending) return;
+      const linked = readPersonalLink();
+      if (linked) openFromLink(linked);
+    });
+
+    const linked = readPersonalLink();
+    if (linked) openFromLink(linked);
+    else showStart();
   })();
   </script>
 </body>

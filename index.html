@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17365d">
+  <title>پُرگی | པུར་གི — Language Documentation Project</title>
+  <style>
+    :root {
+      --navy:#17365d; --blue:#245b91; --ink:#182536; --muted:#617184;
+      --line:#d9e1ea; --paper:#ffffff; --bg:#f3f6fa; --good:#176b43;
+      --bad:#a12a2a; --soft:#eaf1f8;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; background:var(--bg); color:var(--ink);
+      font-family:Arial, "Noto Sans", sans-serif; line-height:1.55;
+    }
+    .page { max-width:850px; margin:36px auto; padding:0 18px 42px; }
+    header {
+      text-align:center; background:var(--paper); border:1px solid var(--line);
+      border-radius:16px; padding:28px 22px; margin-bottom:20px;
+    }
+    .language-name {
+      display:flex; justify-content:center; align-items:center; flex-wrap:wrap;
+      gap:18px; font-size:clamp(30px,6vw,48px); font-weight:700;
+      color:#142f65; line-height:1.6;
+    }
+    .language-name .urdu { font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic",serif; }
+    .language-name .tibetan { font-family:"Noto Sans Tibetan","Jomolhari","Microsoft Himalaya",serif; }
+    h1 { font-size:21px; margin:10px 0 3px; color:var(--navy); }
+    .subtitle { margin:0; color:var(--muted); }
+    .card {
+      background:var(--paper); border:1px solid var(--line); border-radius:16px;
+      padding:26px; margin:18px 0; box-shadow:0 4px 18px rgba(22,45,72,.04);
+    }
+    h2 { margin:0 0 8px; font-size:22px; color:var(--navy); }
+    .intro { color:var(--muted); margin:0 0 22px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .field { margin-bottom:16px; }
+    label, legend { display:block; font-weight:600; margin-bottom:7px; }
+    .required { color:#a12a2a; }
+    input, select {
+      width:100%; border:1px solid #bdc9d6; border-radius:9px;
+      padding:12px 13px; background:white; color:var(--ink); font:inherit;
+    }
+    input:focus, select:focus { outline:3px solid #d9e8f8; border-color:var(--blue); }
+    fieldset { border:0; padding:0; margin:0 0 16px; }
+    .radio-row { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+    .radio-row label, .checkline { display:flex; align-items:flex-start; gap:9px; font-weight:400; }
+    .radio-row input, .checkline input { width:auto; margin-top:5px; }
+    .consent {
+      background:var(--soft); border-left:4px solid var(--blue);
+      padding:15px 16px; border-radius:8px; margin:14px 0;
+    }
+    .consent p { margin:0 0 9px; }
+    button {
+      border:0; border-radius:9px; padding:13px 22px; background:var(--navy);
+      color:#fff; font:600 16px Arial,sans-serif; cursor:pointer;
+    }
+    button:hover { background:var(--blue); }
+    button:disabled { opacity:.6; cursor:wait; }
+    .status { display:none; padding:13px 15px; border-radius:9px; margin-top:16px; }
+    .status.good { display:block; color:var(--good); background:#e8f5ee; }
+    .status.bad { display:block; color:var(--bad); background:#fbecec; }
+    .small { font-size:13px; color:var(--muted); }
+    .hidden { display:none !important; }
+    footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
+    @media (max-width:650px) {
+      .page { margin:16px auto; padding:0 12px 28px; }
+      .grid { grid-template-columns:1fr; gap:0; }
+      .card { padding:20px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="language-name" aria-label="Purgi in Urdu and Tibetan scripts">
+        <span class="urdu" lang="ur" dir="rtl">پُرگی</span>
+        <span aria-hidden="true">|</span>
+        <span class="tibetan" lang="bo">པུར་གི</span>
+      </div>
+      <h1>Purgi Language Documentation Project</h1>
+      <p class="subtitle">Volunteer registration and language documentation</p>
+    </header>
+
+    <section class="card" id="registrationCard">
+      <h2>Contributor Registration</h2>
+      <p class="intro">
+        Register as a volunteer contributor to help document پُرگی / པུར་གི.
+        Registration is open to adults aged 18 and above.
+      </p>
+
+      <form id="registrationForm"
+            action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
+            method="post"
+            target="submissionFrame"
+            accept-charset="UTF-8">
+        <input type="hidden" name="action" value="register">
+        <input type="hidden" name="adultConfirmed" value="yes">
+        <input type="hidden" name="consentScope"
+          value="Private audio; anonymised linguistic data may be used in publications and shared datasets; withdrawal requests subject to publication/distribution limits.">
+        <input type="hidden" name="formStartedAt" id="formStartedAt">
+        <div class="hidden" aria-hidden="true">
+          <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="name">Full name <span class="required">*</span></label>
+            <input id="name" name="name" autocomplete="name" required maxlength="120">
+          </div>
+          <div class="field">
+            <label for="email">Email address <span class="required">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required maxlength="160">
+          </div>
+          <div class="field">
+            <label for="ageBand">Age group <span class="required">*</span></label>
+            <select id="ageBand" name="ageBand" required>
+              <option value="">Select your age group</option>
+              <option value="18-24">18–24</option>
+              <option value="25-34">25–34</option>
+              <option value="35-44">35–44</option>
+              <option value="45-54">45–54</option>
+              <option value="55-64">55–64</option>
+              <option value="65+">65 and above</option>
+            </select>
+          </div>
+          <div class="field">
+            <fieldset>
+              <legend>Gender <span class="required">*</span></legend>
+              <div class="radio-row">
+                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                <label><input type="radio" name="gender" value="Female" required> Female</label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="residence">Place of residence <span class="required">*</span></label>
+          <input id="residence" name="residence" required maxlength="160"
+                 placeholder="Village / town, district">
+        </div>
+
+        <div class="consent">
+          <strong>Consent to participate</strong>
+          <p>
+            I voluntarily agree to contribute words, sentences and audio recordings
+            in پُرگی / པུར་གི for language documentation and research.
+            My audio will remain accessible only to the research team. My linguistic
+            contributions may be used in research publications and shared datasets
+            without my personal identifying information. I may request withdrawal,
+            subject to limitations after anonymised data has been published or shared.
+          </p>
+          <label class="checkline">
+            <input type="checkbox" name="consent" value="yes" required>
+            <span>I am at least 18 years old and I have read and agree to the above consent statement.</span>
+          </label>
+        </div>
+
+        <p class="small">
+          Your contact and demographic details will be kept in a restricted
+          administrative record. Your linguistic contributions will use a
+          Contributor ID rather than your name.
+        </p>
+        <button id="submitButton" type="submit">Register as a contributor</button>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <section class="card hidden" id="successCard">
+      <h2>Registration successful</h2>
+      <p>Your permanent Contributor ID is:</p>
+      <p id="contributorId" style="font-size:26px;font-weight:700;color:#17365d;word-break:break-word"></p>
+      <button type="button" id="copyIdButton">Copy Contributor ID</button>
+      <p>Please save this ID. You will need it whenever you submit a Purgi word or sentence.</p>
+      <p class="small">Keep your Contributor ID private. It links your contributions to your registration record.</p>
+    </section>
+
+    <footer>
+      پُرگی | པུར་གི · Purgi Language Documentation Project
+    </footer>
+  </main>
+
+  <iframe name="submissionFrame" id="submissionFrame" title="Registration response" class="hidden"></iframe>
+
+  <script>
+    const form = document.getElementById("registrationForm");
+    const button = document.getElementById("submitButton");
+    const statusBox = document.getElementById("status");
+    const started = document.getElementById("formStartedAt");
+    const frame = document.getElementById("submissionFrame");
+    let waitingForResponse = false;
+
+    started.value = String(Date.now());
+
+    form.addEventListener("submit", function () {
+      statusBox.className = "status";
+      statusBox.textContent = "";
+      button.disabled = true;
+      button.textContent = "Submitting…";
+      waitingForResponse = true;
+      // Refresh the minimum-completion timer at the point of submission.
+      started.value = String(Date.now() - 4000);
+    });
+
+    window.addEventListener("message", function (event) {
+      if (!event.data || event.data.type !== "PURGI_BACKEND_RESULT") return;
+      const result = event.data.data || {};
+      if (!waitingForResponse) return;
+      waitingForResponse = false;
+      button.disabled = false;
+      button.textContent = "Register as a contributor";
+
+      if (result.success) {
+        document.getElementById("registrationCard").classList.add("hidden");
+        document.getElementById("successCard").classList.remove("hidden");
+        document.getElementById("contributorId").textContent = result.contributorId;
+        document.getElementById("copyIdButton").onclick = function () {
+          navigator.clipboard.writeText(result.contributorId).then(function () {
+            this.textContent = "Copied";
+          }.bind(this));
+        };
+      } else {
+        statusBox.className = "status bad";
+        statusBox.textContent = result.message || "Registration could not be completed. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>

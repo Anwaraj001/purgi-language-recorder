@@ -101,7 +101,7 @@
         <input type="hidden" name="adultConfirmed" value="yes">
         <input type="hidden" name="consentScope"
           value="Private audio; anonymised linguistic data may be used in publications and shared datasets; withdrawal requests subject to publication/distribution limits.">
-        <input type="hidden" name="formStartedAt" id="formStartedAt">
+        <input type="hidden" name="formElapsedMs" id="formElapsedMs">
         <div class="hidden" aria-hidden="true">
           <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
         </div>
@@ -190,11 +190,17 @@
     const form = document.getElementById("registrationForm");
     const button = document.getElementById("submitButton");
     const statusBox = document.getElementById("status");
-    const started = document.getElementById("formStartedAt");
+    const elapsedField = document.getElementById("formElapsedMs");
+    const pageLoadedAt = Date.now();
     const frame = document.getElementById("submissionFrame");
     let waitingForResponse = false;
+    let responseTimer = null;
+    const RESPONSE_TIMEOUT_MS = 30000;
 
-    started.value = String(Date.now());
+    function resetButton() {
+      button.disabled = false;
+      button.textContent = "Register as a contributor";
+    }
 
     form.addEventListener("submit", function () {
       statusBox.className = "status";
@@ -202,17 +208,37 @@
       button.disabled = true;
       button.textContent = "Submitting…";
       waitingForResponse = true;
-      // Refresh the minimum-completion timer at the point of submission.
-      started.value = String(Date.now() - 4000);
+      // Time spent on the form, measured entirely on this device (immune to clock differences).
+      elapsedField.value = String(Date.now() - pageLoadedAt);
+
+      // Never leave the button stuck: if the backend reply does not arrive, recover.
+      clearTimeout(responseTimer);
+      responseTimer = setTimeout(function () {
+        if (!waitingForResponse) return;
+        waitingForResponse = false;
+        resetButton();
+        statusBox.className = "status bad";
+        statusBox.textContent =
+          "We did not receive a confirmation from the server. Your registration may still " +
+          "have been recorded, so please do not register again yet. Contact the research team " +
+          "with your email address to obtain your Contributor ID.";
+      }, RESPONSE_TIMEOUT_MS);
     });
 
+    // Apps Script serves its HTML from a googleusercontent.com sandbox frame.
+    function isTrustedBackendOrigin(origin) {
+      return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/.test(origin) ||
+             origin === "https://script.google.com";
+    }
+
     window.addEventListener("message", function (event) {
+      if (!isTrustedBackendOrigin(event.origin)) return;
       if (!event.data || event.data.type !== "PURGI_BACKEND_RESULT") return;
       const result = event.data.data || {};
       if (!waitingForResponse) return;
       waitingForResponse = false;
-      button.disabled = false;
-      button.textContent = "Register as a contributor";
+      clearTimeout(responseTimer);
+      resetButton();
 
       if (result.success) {
         document.getElementById("registrationCard").classList.add("hidden");

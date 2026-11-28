@@ -6,118 +6,161 @@
   <meta name="theme-color" content="#17365d">
   <meta name="referrer" content="no-referrer">
   <title>پُرگی | པུར་གི — Language Documentation Project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --navy:#17365d; --blue:#245b91; --ink:#182536; --muted:#617184;
       --line:#d9e1ea; --paper:#ffffff; --bg:#f3f6fa; --good:#176b43;
       --bad:#a12a2a; --soft:#eaf1f8; --rec:#c0392b;
+      --nastaliq:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq","Noto Naskh Arabic",serif;
     }
     * { box-sizing:border-box; }
     body {
-      margin:0; background:var(--bg); color:var(--ink);
+      margin:0; background:var(--bg); color:var(--ink); font-size:17px;
       font-family:Arial, "Noto Sans", sans-serif; line-height:1.55;
     }
-    .page { max-width:850px; margin:36px auto; padding:0 18px 42px; }
+    .page { max-width:860px; margin:30px auto; padding:0 18px 42px; }
     header {
       text-align:center; background:var(--paper); border:1px solid var(--line);
-      border-radius:16px; padding:28px 22px; margin-bottom:20px;
+      border-radius:16px; padding:24px 22px; margin-bottom:20px;
     }
     .language-name {
       display:flex; justify-content:center; align-items:center; flex-wrap:wrap;
       gap:18px; font-size:clamp(30px,6vw,48px); font-weight:700;
       color:#142f65; line-height:1.6;
     }
-    .urdu { font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic",serif; }
+    .urdu-name { font-family:var(--nastaliq); }
     .tibetan { font-family:"Noto Sans Tibetan","Jomolhari","Microsoft Himalaya",serif; }
+
+    /* Every English text is followed by its Urdu version. */
+    .ur {
+      display:block; font-family:var(--nastaliq); direction:rtl; unicode-bidi:isolate;
+      font-size:1.02em; line-height:2.1; font-weight:inherit;
+    }
+    .en { display:block; }
+    .center .ur, .center .en { text-align:center; }
+    button .ur, button .en { text-align:center; }
+    button .ur { line-height:1.9; font-size:0.98em; }
+    .inline-bi .en, .inline-bi .ur { display:inline; }
+    .inline-bi .ur { unicode-bidi:isolate; }
+    .inline-bi .en::after { content:" · "; }
+
     h1 { font-size:21px; margin:10px 0 3px; color:var(--navy); }
     .subtitle { margin:0; color:var(--muted); }
     .card {
       background:var(--paper); border:1px solid var(--line); border-radius:16px;
       padding:26px; margin:18px 0; box-shadow:0 4px 18px rgba(22,45,72,.04);
     }
-    h2 { margin:0 0 8px; font-size:22px; color:var(--navy); }
-    h3 { margin:22px 0 10px; font-size:17px; color:var(--navy); }
+    h2 { margin:0 0 10px; font-size:23px; color:var(--navy); }
+    h3 { margin:24px 0 10px; font-size:18px; color:var(--navy); }
     .intro { color:var(--muted); margin:0 0 22px; }
     .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .field { margin-bottom:16px; }
+    .field { margin-bottom:18px; }
     label, legend { display:block; font-weight:600; margin-bottom:7px; }
-    .hint { display:block; font-size:13px; color:var(--muted); margin:-4px 0 7px; }
+    .hint { display:block; font-size:14px; color:var(--muted); margin:-4px 0 8px; font-weight:400; }
     .required { color:#a12a2a; }
     input, select, textarea {
       width:100%; border:1px solid #bdc9d6; border-radius:9px;
       padding:12px 13px; background:white; color:var(--ink); font:inherit;
     }
-    textarea { min-height:60px; resize:vertical; }
-    textarea.urdu, textarea.tibetan { font-size:20px; line-height:1.9; }
+    textarea { min-height:62px; resize:vertical; }
+    textarea.urdu-input { font-family:var(--nastaliq); font-size:20px; line-height:2.1; }
+    textarea.tibetan { font-size:20px; line-height:1.9; }
     input:focus, select:focus, textarea:focus { outline:3px solid #d9e8f8; border-color:var(--blue); }
     fieldset { border:0; padding:0; margin:0 0 16px; }
-    .radio-row { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
-    .radio-row label, .checkline { display:flex; align-items:flex-start; gap:9px; font-weight:400; }
-    .radio-row input, .checkline input { width:auto; margin-top:5px; }
+    .radio-row { display:flex; gap:26px; align-items:center; flex-wrap:wrap; }
+    .radio-row label, .checkline { display:flex; align-items:flex-start; gap:10px; font-weight:400; }
+    .radio-row input, .checkline input { width:auto; margin-top:7px; transform:scale(1.2); }
     .consent {
       background:var(--soft); border-left:4px solid var(--blue);
       padding:15px 16px; border-radius:8px; margin:14px 0;
     }
     .consent p { margin:0 0 9px; }
     button {
-      border:0; border-radius:9px; padding:13px 22px; background:var(--navy);
+      border:0; border-radius:10px; padding:12px 22px; background:var(--navy);
       color:#fff; font:600 16px Arial,sans-serif; cursor:pointer;
     }
     button:hover { background:var(--blue); }
     button:disabled { opacity:.6; cursor:wait; }
     button.secondary { background:#fff; color:var(--navy); border:1px solid var(--navy); }
     button.secondary:hover { background:var(--soft); }
-    button.link { background:none; color:var(--blue); padding:0; font-weight:400; font-size:14px; text-decoration:underline; }
-    .button-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-    .status { display:none; padding:13px 15px; border-radius:9px; margin-top:16px; }
+    button.link {
+      background:none; color:var(--blue); padding:0; font-weight:400; font-size:15px;
+      text-decoration:underline; text-align:left;
+    }
+    button.link .ur, button.link .en { text-align:inherit; }
+    .button-row { display:flex; gap:12px; flex-wrap:wrap; align-items:stretch; }
+    .status { display:none; padding:12px 15px; border-radius:9px; margin-top:16px; }
     .status.good { display:block; color:var(--good); background:#e8f5ee; }
     .status.bad { display:block; color:var(--bad); background:#fbecec; }
     .status.info { display:block; color:var(--navy); background:var(--soft); }
-    .small { font-size:13px; color:var(--muted); }
+    .small { font-size:14px; color:var(--muted); }
     .hidden { display:none !important; }
     .big-id { font-size:26px; font-weight:700; color:var(--navy); word-break:break-word; margin:6px 0 14px; }
     .who {
       display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
-      background:var(--soft); border-radius:9px; padding:10px 14px; margin-bottom:18px; font-size:14px;
+      background:var(--soft); border-radius:9px; padding:8px 14px; margin-bottom:18px; font-size:15px;
     }
+    .topnav { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
     .linkbox { display:flex; gap:8px; margin:10px 0 4px; }
     .linkbox input { font-size:13px; padding:9px 10px; }
-    .linkbox button { padding:9px 14px; font-size:14px; white-space:nowrap; }
-    details.save-link { margin-top:16px; font-size:14px; }
+    .linkbox button { padding:8px 14px; font-size:14px; white-space:nowrap; }
+    details.save-link { margin-top:18px; font-size:15px; }
     details.save-link summary { cursor:pointer; color:var(--blue); }
-    .recorder {
-      border:1px solid var(--line); border-radius:12px; padding:16px; background:#fbfcfe;
-    }
-    .rec-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    .rec-btn { background:var(--rec); }
-    .rec-btn:hover { background:#a93226; }
-    .rec-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--rec); margin-right:6px; animation:blink 1s infinite; }
-    @keyframes blink { 50% { opacity:.2; } }
-    .rec-time { font-variant-numeric:tabular-nums; font-weight:600; }
-    audio { width:100%; margin-top:12px; }
     .already {
       display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
       background:var(--soft); border:1px solid #c9d9ea; border-radius:10px;
       padding:12px 14px; margin:0 0 22px;
     }
-    .already button { padding:10px 16px; font-size:15px; }
     .divider { border:0; border-top:1px solid var(--line); margin:26px 0 4px; }
-    .person-list { list-style:none; padding:0; margin:0 0 18px; }
-    .person-list li {
-      display:flex; align-items:center; gap:10px; border:1px solid var(--line);
-      border-radius:10px; padding:6px 12px 6px 6px; margin-bottom:10px; background:#fff;
-    }
-    .person-list .pick {
+
+    /* Lists of big choice buttons (people, activities, topics) */
+    .choice-list { list-style:none; padding:0; margin:0 0 18px; }
+    .choice-list li { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+    .choice {
       flex:1; text-align:left; background:var(--soft); color:var(--navy);
-      display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+      border:1px solid #c9d9ea; padding:12px 16px; display:block; width:100%;
     }
-    .person-list .pick:hover { background:#dce8f5; }
-    .person-list .pick .pid { font-size:13px; font-weight:400; color:var(--muted); }
+    .choice:hover { background:#dce8f5; }
+    .choice .en { font-size:17px; text-align:left; }
+    .choice .ur { font-size:18px; text-align:right; }
+    .choice .meta .en { text-align:left; }
+    .choice .meta .ur { text-align:right; }
+    .choice .meta { display:block; font-size:13px; font-weight:400; color:var(--muted); margin-top:2px; }
+    .choice .meta .ur { font-size:14px; line-height:1.9; }
+    .choice.done { background:#eef7f1; border-color:#b9dcc6; }
+    .mode-choice { padding:18px 20px; }
+    .mode-choice .en { font-size:19px; }
+    .mode-choice .ur { font-size:21px; }
+
+    /* Prompt being translated */
+    .prompt-box {
+      border:2px solid var(--blue); border-radius:14px; padding:18px 20px; margin:6px 0 20px;
+      background:#f7fbff;
+    }
+    .prompt-meta { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:13px; color:var(--muted); }
+    .prompt-en { font-size:26px; font-weight:700; color:var(--ink); margin:10px 0 2px; }
+    .prompt-ur { font-family:var(--nastaliq); direction:rtl; font-size:30px; line-height:2.2; color:var(--ink); }
+    .prompt-note { font-size:14px; color:var(--blue); margin-top:6px; }
+
+    .recorder { border:1px solid var(--line); border-radius:12px; padding:16px; background:#fbfcfe; }
+    .rec-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .rec-btn { background:var(--rec); }
+    .rec-btn:hover { background:#a93226; }
+    .rec-dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--rec); margin-right:6px; animation:blink 1s infinite; }
+    @keyframes blink { 50% { opacity:.2; } }
+    #recState { flex-basis:100%; }
+    audio { width:100%; margin-top:12px; }
     footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
     @media (max-width:650px) {
-      .page { margin:16px auto; padding:0 12px 28px; }
+      body { font-size:16px; }
+      .page { margin:14px auto; padding:0 12px 28px; }
       .grid { grid-template-columns:1fr; gap:0; }
       .card { padding:20px 16px; }
+      .prompt-en { font-size:22px; }
+      .prompt-ur { font-size:26px; }
     }
   </style>
 </head>
@@ -125,96 +168,90 @@
   <main class="page">
     <header>
       <div class="language-name" aria-label="Purgi in Urdu and Tibetan scripts">
-        <span class="urdu" lang="ur" dir="rtl">پُرگی</span>
+        <span class="urdu-name" lang="ur" dir="rtl">پُرگی</span>
         <span aria-hidden="true">|</span>
         <span class="tibetan" lang="bo">པུར་གི</span>
       </div>
-      <h1>Purgi Language Documentation Project</h1>
-      <p class="subtitle">Volunteer registration and language documentation</p>
+      <h1 class="center"><span class="en">Purgi Language Documentation Project</span><span class="ur" lang="ur">پرگی زبان دستاویزی منصوبہ</span></h1>
+      <p class="subtitle center"><span class="en">Volunteer registration and language documentation</span><span class="ur" lang="ur">رضاکاروں کی رجسٹریشن اور زبان کی دستاویز بندی</span></p>
     </header>
 
     <!-- ============ WHO IS CONTRIBUTING (shared devices) ============ -->
     <section class="card hidden" id="pickerCard">
-      <h2>Who is contributing?</h2>
-      <p class="intro">Choose your name. Your words will be saved under your Contributor ID.</p>
-      <ul class="person-list" id="personList"></ul>
+      <h2><span class="en">Who is contributing?</span><span class="ur" lang="ur">کون حصہ لے رہا ہے؟</span></h2>
+      <p class="intro"><span class="en">Choose your name. Your words will be saved under your Contributor ID.</span><span class="ur" lang="ur">اپنا نام منتخب کریں۔ آپ کے الفاظ آپ کی کنٹری بیوٹر آئی ڈی کے تحت محفوظ ہوں گے۔</span></p>
+      <ul class="choice-list" id="personList"></ul>
       <div class="button-row">
-        <button type="button" class="secondary" id="addPersonButton">+ Register a new person</button>
-        <button type="button" class="secondary" id="pickerAlreadyButton">Already registered? Add yourself</button>
+        <button type="button" class="secondary" id="addPersonButton"><span class="en">+ Register a new person</span><span class="ur" lang="ur">+ نئے شخص کی رجسٹریشن</span></button>
+        <button type="button" class="secondary" id="pickerAlreadyButton"><span class="en">Already registered? Add yourself</span><span class="ur" lang="ur">پہلے سے رجسٹرڈ ہیں؟ خود کو شامل کریں</span></button>
       </div>
+    </section>
+
+    <!-- ============ NAME FOR A PERSONAL-LINK SIGN-IN ============ -->
+    <section class="card hidden" id="nameCard">
+      <h2><span class="en">Welcome, <span id="nameCardId"></span></span><span class="ur" lang="ur">خوش آمدید</span></h2>
+      <p><span class="en">This device now remembers you. Type the name you want to see in the <em>Who is contributing?</em> list, so you can pick yourself next time.</span>
+         <span class="ur" lang="ur">یہ آلہ اب آپ کو یاد رکھے گا۔ اپنا نام لکھیں تاکہ اگلی بار فہرست میں سے خود کو منتخب کر سکیں۔</span></p>
+      <div class="field">
+        <label for="deviceName"><span class="en">Your name (kept only on this device)</span><span class="ur" lang="ur">آپ کا نام (صرف اسی آلے پر محفوظ رہے گا)</span></label>
+        <input id="deviceName" maxlength="60" autocomplete="name">
+      </div>
+      <button type="button" id="saveNameButton"><span class="en">Continue →</span><span class="ur" lang="ur">آگے بڑھیں</span></button>
     </section>
 
     <!-- ============ ALREADY REGISTERED ============ -->
     <section class="card hidden" id="signInCard">
-      <button type="button" class="link" id="signInBackButton" style="margin-bottom:12px">← Back</button>
-      <h2>Already registered?</h2>
-      <p class="intro">
-        You do not need to register again. Get your personal link and this device
-        will remember you.
-      </p>
+      <button type="button" class="link" id="signInBackButton" style="margin-bottom:12px"><span class="inline-bi"><span class="en">← Back</span><span class="ur" lang="ur">واپس</span></span></button>
+      <h2><span class="en">Already registered?</span><span class="ur" lang="ur">پہلے سے رجسٹرڈ ہیں؟</span></h2>
+      <p class="intro"><span class="en">You do not need to register again. Get your personal link and this device will remember you.</span>
+         <span class="ur" lang="ur">آپ کو دوبارہ رجسٹر کرنے کی ضرورت نہیں۔ اپنا ذاتی لنک حاصل کریں، پھر یہ آلہ آپ کو یاد رکھے گا۔</span></p>
 
-      <h3>Email me my personal link</h3>
+      <h3><span class="en">Email me my personal link</span><span class="ur" lang="ur">میرا ذاتی لنک مجھے ای میل کریں</span></h3>
       <form id="linkRequestForm"
             action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
-            method="post"
-            target="submissionFrame"
-            accept-charset="UTF-8">
+            method="post" target="submissionFrame" accept-charset="UTF-8">
         <input type="hidden" name="action" value="requestLink">
         <input type="hidden" name="formElapsedMs" id="linkElapsedMs">
         <div class="hidden" aria-hidden="true">
           <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
         </div>
         <div class="field">
-          <label for="linkEmail">The email address you registered with</label>
+          <label for="linkEmail"><span class="en">The email address you registered with</span><span class="ur" lang="ur">وہ ای میل پتہ جس سے آپ نے رجسٹریشن کی تھی</span></label>
           <input id="linkEmail" name="email" type="email" autocomplete="email" required maxlength="160">
         </div>
-        <button type="submit" id="linkRequestButton">Email me my link</button>
+        <button type="submit" id="linkRequestButton"></button>
         <div id="linkStatus" class="status" role="status" aria-live="polite"></div>
       </form>
 
       <hr class="divider">
-      <h3>Or paste your personal link</h3>
-      <p class="small" style="margin-top:-4px">
-        If you saved your link (for example on WhatsApp), copy it and paste it here.
-      </p>
+      <h3><span class="en">Or paste your personal link</span><span class="ur" lang="ur">یا اپنا ذاتی لنک یہاں چسپاں کریں</span></h3>
+      <p class="small" style="margin-top:-4px"><span class="en">If you saved your link (for example on WhatsApp), copy it and paste it here.</span>
+         <span class="ur" lang="ur">اگر آپ نے اپنا لنک محفوظ کیا تھا (مثلاً واٹس ایپ پر) تو اسے کاپی کر کے یہاں چسپاں کریں۔</span></p>
       <div class="linkbox">
         <input id="pasteLink" autocomplete="off" aria-label="Paste your personal link"
                placeholder="https://anwaraj001.github.io/purgi-language-recorder/#c=…">
-        <button type="button" id="pasteLinkButton">Open</button>
+        <button type="button" id="pasteLinkButton"><span class="en">Open</span><span class="ur" lang="ur">کھولیں</span></button>
       </div>
       <div id="pasteStatus" class="status" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- ============ NAME FOR A PERSONAL-LINK SIGN-IN ============ -->
-    <section class="card hidden" id="nameCard">
-      <h2>Welcome, <span id="nameCardId"></span></h2>
-      <p>This device now remembers you. Type the name you want to see in the
-        <em>Who is contributing?</em> list, so you can pick yourself next time.</p>
-      <div class="field">
-        <label for="deviceName">Your name (kept only on this device)</label>
-        <input id="deviceName" maxlength="60" autocomplete="name">
-      </div>
-      <button type="button" id="saveNameButton">Continue →</button>
-    </section>
-
     <!-- ============ REGISTRATION ============ -->
     <section class="card hidden" id="registrationCard">
-      <button type="button" class="link hidden" id="backToListButton" style="margin-bottom:12px">← Back to the list of contributors</button>
+      <button type="button" class="link hidden" id="backToListButton" style="margin-bottom:12px"><span class="inline-bi"><span class="en">← Back to the list of contributors</span><span class="ur" lang="ur">رضاکاروں کی فہرست پر واپس</span></span></button>
       <div class="already">
-        <span><strong>Already registered?</strong> You do not need to register again.</span>
-        <button type="button" class="secondary" id="alreadyButton">Get my personal link</button>
+        <span><span class="en"><strong>Already registered?</strong> You do not need to register again.</span>
+              <span class="ur" lang="ur"><strong>پہلے سے رجسٹرڈ ہیں؟</strong> آپ کو دوبارہ رجسٹر کرنے کی ضرورت نہیں۔</span></span>
+        <button type="button" class="secondary" id="alreadyButton"><span class="en">Get my personal link</span><span class="ur" lang="ur">میرا ذاتی لنک حاصل کریں</span></button>
       </div>
-      <h2>Contributor Registration</h2>
+      <h2><span class="en">Contributor Registration</span><span class="ur" lang="ur">رضاکار رجسٹریشن</span></h2>
       <p class="intro">
-        Register as a volunteer contributor to help document پُرگی / པུར་གི.
-        Registration is open to adults aged 18 and above. You register only once.
+        <span class="en">Register as a volunteer contributor to help document پُرگی / པུར་གི. Registration is open to adults aged 18 and above. You register only once.</span>
+        <span class="ur" lang="ur">پرگی زبان کی دستاویز بندی میں مدد کے لیے بطور رضاکار رجسٹر کریں۔ رجسٹریشن صرف 18 سال اور اس سے زیادہ عمر کے افراد کے لیے ہے۔ رجسٹریشن صرف ایک بار کرنی ہوتی ہے۔</span>
       </p>
 
       <form id="registrationForm"
             action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
-            method="post"
-            target="submissionFrame"
-            accept-charset="UTF-8">
+            method="post" target="submissionFrame" accept-charset="UTF-8">
         <input type="hidden" name="action" value="register">
         <input type="hidden" name="adultConfirmed" value="yes">
         <input type="hidden" name="consentScope"
@@ -226,113 +263,152 @@
 
         <div class="grid">
           <div class="field">
-            <label for="name">Full name <span class="required">*</span></label>
+            <label for="name"><span class="en">Full name <span class="required">*</span></span><span class="ur" lang="ur">پورا نام <span class="required">*</span></span></label>
             <input id="name" name="name" autocomplete="name" required maxlength="120">
           </div>
           <div class="field">
-            <label for="email">Email address <span class="required">*</span></label>
+            <label for="email"><span class="en">Email address <span class="required">*</span></span><span class="ur" lang="ur">ای میل پتہ <span class="required">*</span></span></label>
             <input id="email" name="email" type="email" autocomplete="email" required maxlength="160">
           </div>
           <div class="field">
-            <label for="ageBand">Age group <span class="required">*</span></label>
+            <label for="ageBand"><span class="en">Age group <span class="required">*</span></span><span class="ur" lang="ur">عمر کا گروپ <span class="required">*</span></span></label>
             <select id="ageBand" name="ageBand" required>
-              <option value="">Select your age group</option>
+              <option value="">Select your age group · اپنی عمر کا گروپ منتخب کریں</option>
               <option value="18-24">18–24</option>
               <option value="25-34">25–34</option>
               <option value="35-44">35–44</option>
               <option value="45-54">45–54</option>
               <option value="55-64">55–64</option>
-              <option value="65+">65 and above</option>
+              <option value="65+">65 and above · 65 اور اس سے زیادہ</option>
             </select>
           </div>
           <div class="field">
             <fieldset>
-              <legend>Gender <span class="required">*</span></legend>
+              <legend><span class="en">Gender <span class="required">*</span></span><span class="ur" lang="ur">جنس <span class="required">*</span></span></legend>
               <div class="radio-row">
-                <label><input type="radio" name="gender" value="Male" required> Male</label>
-                <label><input type="radio" name="gender" value="Female" required> Female</label>
+                <label><input type="radio" name="gender" value="Male" required> <span class="inline-bi"><span class="en">Male</span><span class="ur" lang="ur">مرد</span></span></label>
+                <label><input type="radio" name="gender" value="Female" required> <span class="inline-bi"><span class="en">Female</span><span class="ur" lang="ur">خاتون</span></span></label>
               </div>
             </fieldset>
           </div>
         </div>
 
         <div class="field">
-          <label for="residence">Place of residence <span class="required">*</span></label>
+          <label for="residence"><span class="en">Place of residence <span class="required">*</span></span><span class="ur" lang="ur">رہائش کی جگہ <span class="required">*</span></span></label>
           <input id="residence" name="residence" required maxlength="160"
-                 placeholder="Village / town, district">
+                 placeholder="Village / town, district · گاؤں / قصبہ، ضلع">
         </div>
 
         <div class="consent">
-          <strong>Consent to participate</strong>
+          <strong><span class="en">Consent to participate</span><span class="ur" lang="ur">شرکت کی رضامندی</span></strong>
           <p>
-            I voluntarily agree to contribute words, sentences and audio recordings
+            <span class="en">I voluntarily agree to contribute words, sentences and audio recordings
             in پُرگی / པུར་གི for language documentation and research.
             My audio will remain accessible only to the research team. My linguistic
             contributions may be used in research publications and shared datasets
             without my personal identifying information. I may request withdrawal,
-            subject to limitations after anonymised data has been published or shared.
+            subject to limitations after anonymised data has been published or shared.</span>
+            <span class="ur" lang="ur">میں اپنی مرضی سے زبان کی دستاویز بندی اور تحقیق کے لیے پرگی زبان میں الفاظ، جملے اور آڈیو ریکارڈنگ فراہم کرنے پر رضامند ہوں۔ میری آڈیو صرف تحقیقی ٹیم کو دستیاب ہوگی۔ میری لسانی معلومات میری ذاتی شناخت کے بغیر تحقیقی اشاعتوں اور مشترکہ ڈیٹا سیٹس میں استعمال ہو سکتی ہیں۔ میں اپنا حصہ واپس لینے کی درخواست کر سکتا ہوں، تاہم گمنام ڈیٹا کے شائع یا شیئر ہو جانے کے بعد اس کی کچھ حدود ہوں گی۔</span>
           </p>
           <label class="checkline">
             <input type="checkbox" name="consent" value="yes" required>
-            <span>I am at least 18 years old and I have read and agree to the above consent statement.</span>
+            <span><span class="en">I am at least 18 years old and I have read and agree to the above consent statement.</span>
+                  <span class="ur" lang="ur">میری عمر کم از کم 18 سال ہے اور میں نے اوپر دیا گیا رضامندی نامہ پڑھ لیا ہے اور اس سے متفق ہوں۔</span></span>
           </label>
         </div>
 
         <p class="small">
-          Your contact and demographic details will be kept in a restricted
-          administrative record. Your linguistic contributions will use a
-          Contributor ID rather than your name.
+          <span class="en">Your contact and demographic details will be kept in a restricted administrative record. Your linguistic contributions will use a Contributor ID rather than your name.</span>
+          <span class="ur" lang="ur">آپ کی رابطہ اور ذاتی معلومات ایک محفوظ انتظامی ریکارڈ میں رکھی جائیں گی۔ آپ کے لسانی اندراجات آپ کے نام کے بجائے کنٹری بیوٹر آئی ڈی کے ساتھ محفوظ ہوں گے۔</span>
         </p>
-        <button id="registerButton" type="submit">Register as a contributor</button>
+        <button id="registerButton" type="submit"></button>
         <div id="regStatus" class="status" role="status" aria-live="polite"></div>
       </form>
     </section>
 
     <!-- ============ REGISTERED ============ -->
     <section class="card hidden" id="registeredCard">
-      <h2>Registration successful</h2>
-      <p>Your permanent Contributor ID is:</p>
+      <h2><span class="en">Registration successful</span><span class="ur" lang="ur">رجسٹریشن کامیاب</span></h2>
+      <p><span class="en">Your permanent Contributor ID is:</span><span class="ur" lang="ur">آپ کی مستقل کنٹری بیوٹر آئی ڈی یہ ہے:</span></p>
       <p id="registeredId" class="big-id"></p>
-      <p>
-        This device will now remember you, so you can contribute as many words and
-        sentences as you like without registering or typing your details again.
-      </p>
+      <p><span class="en">This device will now remember you, so you can contribute as many words and sentences as you like without registering or typing your details again.</span>
+         <span class="ur" lang="ur">یہ آلہ اب آپ کو یاد رکھے گا، اس لیے آپ دوبارہ رجسٹریشن یا تفصیلات لکھے بغیر جتنے چاہیں الفاظ اور جملے بھیج سکتے ہیں۔</span></p>
       <p class="small">
-        <strong>Using another phone or computer later?</strong> Save this personal link
-        (for example, send it to yourself on WhatsApp or email). Opening it on any device
-        lets you contribute from there. Keep it private.
+        <span class="en"><strong>Using another phone or computer later?</strong> Save this personal link (for example, send it to yourself on WhatsApp or email). Opening it on any device lets you contribute from there. Keep it private.</span>
+        <span class="ur" lang="ur"><strong>بعد میں کوئی دوسرا فون یا کمپیوٹر استعمال کریں گے؟</strong> یہ ذاتی لنک محفوظ کر لیں (مثلاً واٹس ایپ یا ای میل پر خود کو بھیج دیں)۔ اسے کسی بھی آلے پر کھول کر آپ وہاں سے حصہ لے سکیں گے۔ اسے کسی کو نہ دیں۔</span>
       </p>
       <div class="linkbox">
         <input id="registeredLink" readonly aria-label="Your personal link">
-        <button type="button" class="secondary" data-copy="registeredLink">Copy link</button>
+        <button type="button" class="secondary" data-copy="registeredLink"></button>
       </div>
       <div class="button-row" style="margin-top:18px">
-        <button type="button" id="startContributingButton">Start contributing →</button>
+        <button type="button" id="startContributingButton"><span class="en">Start contributing →</span><span class="ur" lang="ur">حصہ لینا شروع کریں</span></button>
       </div>
     </section>
 
-    <!-- ============ CONTRIBUTION ============ -->
+    <!-- ============ WHAT WOULD YOU LIKE TO DO? ============ -->
+    <section class="card hidden" id="modeCard">
+      <div class="who"></div>
+      <h2><span class="en">What would you like to do?</span><span class="ur" lang="ur">آپ کیا کرنا چاہیں گے؟</span></h2>
+      <ul class="choice-list">
+        <li><button type="button" class="choice mode-choice" id="modePromptsButton">
+          <span class="en">Translate &amp; record given words and sentences</span>
+          <span class="ur" lang="ur">دیے گئے الفاظ اور جملوں کا پرگی میں ترجمہ اور ریکارڈنگ</span>
+          <span class="meta"><span class="en">We show you simple words and sentences in English and Urdu; you say them in Purgi.</span><span class="ur" lang="ur">ہم آپ کو انگریزی اور اردو میں آسان الفاظ اور جملے دکھائیں گے، آپ انہیں پرگی میں بولیں گے۔</span></span>
+        </button></li>
+        <li><button type="button" class="choice mode-choice" id="modeOwnButton">
+          <span class="en">Enter your own word or sentence</span>
+          <span class="ur" lang="ur">اپنا لفظ یا جملہ لکھیں</span>
+          <span class="meta"><span class="en">Write any Purgi word or sentence you know, and record it.</span><span class="ur" lang="ur">کوئی بھی پرگی لفظ یا جملہ جو آپ جانتے ہیں لکھیں اور ریکارڈ کریں۔</span></span>
+        </button></li>
+      </ul>
+    </section>
+
+    <!-- ============ CHOOSE A TOPIC ============ -->
+    <section class="card hidden" id="domainCard">
+      <div class="topnav">
+        <button type="button" class="link" id="domainBackButton"><span class="inline-bi"><span class="en">← Activities</span><span class="ur" lang="ur">سرگرمیاں</span></span></button>
+      </div>
+      <div class="who"></div>
+      <h2><span class="en">Choose a topic</span><span class="ur" lang="ur">موضوع منتخب کریں</span></h2>
+      <div id="domainStatus" class="status" role="status" aria-live="polite"></div>
+      <ul class="choice-list" id="domainList"></ul>
+    </section>
+
+    <!-- ============ CONTRIBUTION (own text or a given prompt) ============ -->
     <section class="card hidden" id="contributionCard">
-      <div class="who">
-        <span>Contributing as <strong id="whoName"></strong> <span id="whoId" class="small"></span></span>
-        <button type="button" class="link" id="switchButton">Not you? Switch person</button>
+      <div class="topnav">
+        <button type="button" class="link" id="contributionBackButton"></button>
+      </div>
+      <div class="who"></div>
+
+      <div id="ownIntro">
+        <h2><span class="en">Contribute a Purgi word or sentence</span><span class="ur" lang="ur">پرگی لفظ یا جملہ شامل کریں</span></h2>
+        <p class="intro"><span class="en">Submit <strong>one word or one sentence</strong> at a time. Write it in as many scripts as you can, give its meaning, and record how it is pronounced.</span>
+           <span class="ur" lang="ur">ایک وقت میں <strong>ایک لفظ یا ایک جملہ</strong> بھیجیں۔ اسے جتنے رسم الخط میں لکھ سکیں لکھیں، اس کا مطلب بتائیں اور اس کا تلفظ ریکارڈ کریں۔</span></p>
       </div>
 
-      <h2>Contribute a Purgi word or sentence</h2>
-      <p class="intro">
-        Submit <strong>one word or one sentence</strong> at a time. Write it in as many
-        scripts as you can, give its meaning, and record how it is pronounced.
-      </p>
+      <div id="promptIntro" class="hidden">
+        <div class="prompt-box">
+          <div class="prompt-meta">
+            <span id="promptTopic"></span>
+            <span id="promptProgress"></span>
+          </div>
+          <div class="prompt-en" id="promptEn" lang="en"></div>
+          <div class="prompt-ur" id="promptUr" lang="ur"></div>
+          <div class="prompt-note" id="promptNote"></div>
+        </div>
+        <p class="intro"><span class="en">Say this in Purgi, the way you would naturally say it. Then write it below and record it.</span>
+           <span class="ur" lang="ur">اسے پرگی میں اسی طرح کہیے جیسے آپ عام طور پر بولتے ہیں۔ پھر نیچے لکھیں اور ریکارڈ کریں۔</span></p>
+      </div>
 
       <form id="contributionForm"
             action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
-            method="post"
-            target="submissionFrame"
-            accept-charset="UTF-8"
-            novalidate>
+            method="post" target="submissionFrame" accept-charset="UTF-8" novalidate>
         <input type="hidden" name="action" value="contribute">
         <input type="hidden" name="contributorId" id="conContributorId">
         <input type="hidden" name="accessKey" id="conAccessKey">
+        <input type="hidden" name="promptId" id="conPromptId">
         <input type="hidden" name="formElapsedMs" id="conElapsedMs">
         <input type="hidden" name="hasAudio" id="hasAudio" value="no">
         <input type="hidden" name="audio" id="audioData" disabled>
@@ -342,79 +418,88 @@
           <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
         </div>
 
-        <h3>The Purgi word or sentence</h3>
+        <h3><span class="en">The Purgi word or sentence</span><span class="ur" lang="ur">پرگی لفظ یا جملہ</span></h3>
         <div class="field">
-          <label for="roman">Roman script <span class="required">*</span></label>
-          <span class="hint">How it sounds, written in English letters</span>
+          <label for="roman"><span class="en">Roman script <span class="required">*</span></span><span class="ur" lang="ur">رومن رسم الخط <span class="required">*</span></span></label>
+          <span class="hint"><span class="en">How it sounds, written in English letters</span><span class="ur" lang="ur">جیسے بولا جاتا ہے، انگریزی حروف میں لکھیں</span></span>
           <input id="roman" name="roman" maxlength="500" autocomplete="off">
         </div>
         <div class="grid">
           <div class="field">
-            <label for="persoArabic">Perso-Arabic (Urdu) script</label>
-            <textarea id="persoArabic" name="persoArabic" class="urdu" lang="ur" dir="rtl" maxlength="500"></textarea>
+            <label for="persoArabic"><span class="en">Perso-Arabic (Urdu) script</span><span class="ur" lang="ur">اردو (فارسی عربی) رسم الخط</span></label>
+            <textarea id="persoArabic" name="persoArabic" class="urdu-input" lang="ur" dir="rtl" maxlength="500"></textarea>
           </div>
           <div class="field">
-            <label for="tibetan">Tibetan script (<span class="tibetan" lang="bo">བོད་ཡིག</span>)</label>
+            <label for="tibetan"><span class="en">Tibetan script (<span class="tibetan" lang="bo">བོད་ཡིག</span>)</span><span class="ur" lang="ur">تبتی رسم الخط</span></label>
             <textarea id="tibetan" name="tibetan" class="tibetan" lang="bo" maxlength="500"></textarea>
           </div>
         </div>
 
-        <h3>Meaning</h3>
-        <p class="small" style="margin-top:-6px">
-          Give at least one: a meaning, or the Purgi entry in Urdu or Tibetan script.
-        </p>
-        <div class="grid">
-          <div class="field">
-            <label for="english">English meaning</label>
-            <textarea id="english" name="english" maxlength="500"></textarea>
-          </div>
-          <div class="field">
-            <label for="urduHindi">Urdu / Hindi meaning</label>
-            <textarea id="urduHindi" name="urduHindi" maxlength="500"></textarea>
+        <div id="meaningSection">
+          <h3><span class="en">Meaning</span><span class="ur" lang="ur">مطلب</span></h3>
+          <p class="small" style="margin-top:-6px"><span class="en">Give at least one: a meaning, or the Purgi entry in Urdu or Tibetan script.</span>
+             <span class="ur" lang="ur">کم از کم ایک ضرور دیں: مطلب، یا پرگی اندراج اردو یا تبتی رسم الخط میں۔</span></p>
+          <div class="grid">
+            <div class="field">
+              <label for="english"><span class="en">English meaning</span><span class="ur" lang="ur">انگریزی میں مطلب</span></label>
+              <textarea id="english" name="english" maxlength="500"></textarea>
+            </div>
+            <div class="field">
+              <label for="urduHindi"><span class="en">Urdu / Hindi meaning</span><span class="ur" lang="ur">اردو / ہندی میں مطلب</span></label>
+              <textarea id="urduHindi" name="urduHindi" class="urdu-input" dir="auto" maxlength="500"></textarea>
+            </div>
           </div>
         </div>
 
-        <h3>Pronunciation</h3>
+        <h3><span class="en">Pronunciation <span class="required">*</span></span><span class="ur" lang="ur">تلفظ <span class="required">*</span></span></h3>
         <div class="recorder">
-          <p class="small" style="margin-top:0">
-            Say the word or sentence clearly, in a quiet place. Maximum 60 seconds.
-          </p>
+          <p class="small" style="margin-top:0"><span class="en">Say it clearly, in a quiet place. Maximum 60 seconds.</span>
+             <span class="ur" lang="ur">کسی پرسکون جگہ پر صاف آواز میں بولیں۔ زیادہ سے زیادہ 60 سیکنڈ۔</span></p>
           <div class="rec-row">
-            <button type="button" class="rec-btn" id="recordButton">● Record</button>
-            <button type="button" class="hidden" id="stopButton">■ Stop</button>
-            <button type="button" class="secondary hidden" id="discardButton">Delete &amp; record again</button>
-            <span id="recState" class="small"></span>
+            <button type="button" class="rec-btn" id="recordButton"><span class="en">● Record</span><span class="ur" lang="ur">ریکارڈ کریں</span></button>
+            <button type="button" class="hidden" id="stopButton"><span class="en">■ Stop</span><span class="ur" lang="ur">روکیں</span></button>
+            <button type="button" class="secondary hidden" id="discardButton"><span class="en">Delete &amp; record again</span><span class="ur" lang="ur">مٹائیں اور دوبارہ ریکارڈ کریں</span></button>
+            <span id="recState" class="small" aria-live="polite"></span>
           </div>
           <audio id="playback" controls class="hidden"></audio>
         </div>
 
         <div class="button-row" style="margin-top:22px">
-          <button id="contributeButton" type="submit">Submit</button>
+          <button id="contributeButton" type="submit"></button>
+          <button id="skipButton" type="button" class="secondary hidden"><span class="en">Skip</span><span class="ur" lang="ur">چھوڑیں</span></button>
         </div>
         <div id="conStatus" class="status" role="status" aria-live="polite"></div>
       </form>
 
       <details class="save-link">
-        <summary>Contribute from another phone or computer</summary>
-        <p class="small">
-          Open this personal link on the other device. Keep it private; anyone with it
-          can contribute under your Contributor ID.
-        </p>
+        <summary><span class="inline-bi"><span class="en">Contribute from another phone or computer</span><span class="ur" lang="ur">کسی دوسرے فون یا کمپیوٹر سے حصہ لیں</span></span></summary>
+        <p class="small"><span class="en">Open this personal link on the other device. Keep it private; anyone with it can contribute under your Contributor ID.</span>
+           <span class="ur" lang="ur">یہ ذاتی لنک دوسرے آلے پر کھولیں۔ اسے کسی کو نہ دیں، کیونکہ اس کے ذریعے کوئی بھی آپ کی آئی ڈی سے حصہ لے سکتا ہے۔</span></p>
         <div class="linkbox">
           <input id="contributionLink" readonly aria-label="Your personal link">
-          <button type="button" class="secondary" data-copy="contributionLink">Copy link</button>
+          <button type="button" class="secondary" data-copy="contributionLink"></button>
         </div>
       </details>
     </section>
 
-    <!-- ============ CONTRIBUTION SAVED ============ -->
+    <!-- ============ OWN-TEXT CONTRIBUTION SAVED ============ -->
     <section class="card hidden" id="savedCard">
-      <h2>Thank you, your contribution was saved</h2>
-      <p>Contribution ID: <strong id="savedId"></strong></p>
-      <p id="savedAudioNote" class="small"></p>
+      <h2><span class="en">Thank you, your contribution was saved</span><span class="ur" lang="ur">شکریہ، آپ کا حصہ محفوظ ہو گیا</span></h2>
+      <p><span class="inline-bi"><span class="en">Contribution ID</span><span class="ur" lang="ur">شراکت آئی ڈی</span></span>: <strong id="savedId"></strong></p>
       <div class="button-row" style="margin-top:18px">
-        <button type="button" id="anotherButton">Submit another response</button>
-        <button type="button" class="secondary" id="savedSwitchButton">Switch person</button>
+        <button type="button" id="anotherButton"><span class="en">Submit another response</span><span class="ur" lang="ur">ایک اور جمع کریں</span></button>
+        <button type="button" class="secondary" id="savedModeButton"><span class="en">Choose another activity</span><span class="ur" lang="ur">دوسری سرگرمی منتخب کریں</span></button>
+        <button type="button" class="secondary" id="savedSwitchButton"><span class="en">Switch person</span><span class="ur" lang="ur">شخص تبدیل کریں</span></button>
+      </div>
+    </section>
+
+    <!-- ============ TOPIC FINISHED ============ -->
+    <section class="card hidden" id="topicDoneCard">
+      <h2><span class="en">Topic finished. Thank you!</span><span class="ur" lang="ur">موضوع مکمل۔ شکریہ!</span></h2>
+      <p id="topicDoneText"></p>
+      <div class="button-row" style="margin-top:18px">
+        <button type="button" id="topicDoneChooseButton"><span class="en">Choose another topic</span><span class="ur" lang="ur">دوسرا موضوع منتخب کریں</span></button>
+        <button type="button" class="secondary hidden" id="showSkippedButton"><span class="en">Show skipped ones again</span><span class="ur" lang="ur">چھوڑے ہوئے دوبارہ دکھائیں</span></button>
       </div>
     </section>
 
@@ -425,19 +510,56 @@
 
   <iframe name="submissionFrame" id="submissionFrame" title="Submission response" class="hidden"></iframe>
 
+  <!-- Loads the list of prompts (read-only; uses the contributor's key). -->
+  <form id="promptsForm" class="hidden"
+        action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
+        method="post" target="submissionFrame" accept-charset="UTF-8">
+    <input type="hidden" name="action" value="prompts">
+    <input type="hidden" name="contributorId" id="promptsContributorId">
+    <input type="hidden" name="accessKey" id="promptsAccessKey">
+  </form>
+
   <script>
   (function () {
     "use strict";
 
-    const RESPONSE_TIMEOUT_MS = 30000;   // registration
-    const UPLOAD_TIMEOUT_MS = 90000;     // contributions may carry audio
+    const RESPONSE_TIMEOUT_MS = 30000;
+    const UPLOAD_TIMEOUT_MS = 90000;     // contributions carry audio
     const MAX_RECORD_SECONDS = 60;
     const STORAGE_KEY = "purgiContributors";      // everyone registered on this device
-    const OLD_STORAGE_KEY = "purgiContributor";   // single-person storage from the earlier version
+    const OLD_STORAGE_KEY = "purgiContributor";   // single-person storage from an earlier version
 
     const $ = function (id) { return document.getElementById(id); };
     const cards = ["pickerCard", "nameCard", "signInCard", "registrationCard", "registeredCard",
-                   "contributionCard", "savedCard"];
+                   "modeCard", "domainCard", "contributionCard", "savedCard", "topicDoneCard"];
+
+    /* ---------- English + Urdu helpers ---------- */
+
+    // Puts English, then Urdu, into an element.
+    function setBi(el, en, ur) {
+      el.textContent = "";
+      const e = document.createElement("span");
+      e.className = "en"; e.textContent = en;
+      el.appendChild(e);
+      if (ur) {
+        const u = document.createElement("span");
+        u.className = "ur"; u.lang = "ur"; u.textContent = ur;
+        el.appendChild(u);
+      }
+    }
+
+    // Status box. Server messages arrive as "English\nUrdu".
+    function setStatus(box, kind, en, ur) {
+      box.className = kind ? "status " + kind : "status";
+      if (!en) { box.textContent = ""; return; }
+      if (ur === undefined && en.indexOf("\n") !== -1) {
+        const cut = en.indexOf("\n");
+        ur = en.slice(cut + 1); en = en.slice(0, cut);
+      }
+      setBi(box, en, ur);
+    }
+
+    function biText(en, ur) { return en + "\n" + ur; }
 
     /* ---------- Contributors remembered on this device ---------- */
 
@@ -502,13 +624,11 @@
       const key = String(params.get("k") || "").trim().toLowerCase();
       return (isValidId(id) && isValidKey(key)) ? { id: id, key: key } : null;
     }
-
     function addFromLink(parsed) {
       const known = findPerson(parsed.id);
       const person = upsertPerson(parsed.id, parsed.key, "");
       return { person: person, needsName: !known || !known.name };
     }
-
     // A personal link (#c=…&k=…) adds that person to this device, then is removed from the address bar.
     function readPersonalLink() {
       if (!location.hash || location.hash.length < 5) return null;
@@ -517,15 +637,50 @@
       return parsed ? addFromLink(parsed) : null;
     }
 
+    /* ---------- Screens ---------- */
+
     function show(cardId) {
       cards.forEach(function (c) { $(c).classList.toggle("hidden", c !== cardId); });
       window.scrollTo(0, 0);
     }
 
+    // The "Contributing as …" bar shown on the activity, topic and contribution screens.
+    function renderWhoBars() {
+      document.querySelectorAll(".who").forEach(function (bar) {
+        bar.textContent = "";
+        if (!contributor) return;
+        const who = document.createElement("span");
+        const label = document.createElement("span");
+        label.className = "inline-bi";
+        const strong = document.createElement("strong");
+        strong.textContent = displayName(contributor) + (contributor.name ? " (" + contributor.id + ")" : "");
+        setBi(label, "Contributing as", "حصہ لینے والے");
+        who.appendChild(label);
+        who.appendChild(document.createTextNode(": "));
+        who.appendChild(strong);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "link";
+        const inner = document.createElement("span");
+        inner.className = "inline-bi";
+        setBi(inner, "Not you? Switch person", "آپ نہیں ہیں؟ شخص تبدیل کریں");
+        button.appendChild(inner);
+        button.addEventListener("click", showPicker);
+        bar.appendChild(who);
+        bar.appendChild(button);
+      });
+    }
+
     function showStart() {
       if (people.length === 0) showRegistration();
-      else if (people.length === 1) { contributor = people[0]; showContribution(); }
+      else if (people.length === 1) { selectPerson(people[0]); }
       else showPicker();
+    }
+
+    function selectPerson(p) {
+      if (!contributor || contributor.id !== p.id) promptState.skipped = new Set();
+      contributor = p;
+      showMode();
     }
 
     function showPicker() {
@@ -538,25 +693,30 @@
         const li = document.createElement("li");
         const pick = document.createElement("button");
         pick.type = "button";
-        pick.className = "pick";
+        pick.className = "choice";
         const nameLine = document.createElement("span");
+        nameLine.className = "en";
         nameLine.textContent = displayName(p);
         pick.appendChild(nameLine);
         if (p.name) {
           const idLine = document.createElement("span");
-          idLine.className = "pid";
+          idLine.className = "meta";
           idLine.textContent = p.id;
           pick.appendChild(idLine);
         }
-        pick.addEventListener("click", function () { contributor = p; showContribution(); });
+        pick.addEventListener("click", function () { selectPerson(p); });
         const remove = document.createElement("button");
         remove.type = "button";
         remove.className = "link";
-        remove.textContent = "Remove";
+        setBi(remove, "Remove", "ہٹائیں");
         remove.setAttribute("aria-label", "Remove " + displayName(p) + " from this device");
         remove.addEventListener("click", function () {
-          if (!confirm("Remove " + displayName(p) + " from this device? Their contributions are kept. " +
-                       "To use this device again they will need their personal link.")) return;
+          const question =
+            "Remove " + displayName(p) + " from this device? Their contributions are kept. " +
+            "To use this device again they will need their personal link.\n\n" +
+            displayName(p) + " کو اس آلے سے ہٹا دیں؟ ان کے اندراجات محفوظ رہیں گے۔ " +
+            "اس آلے کو دوبارہ استعمال کرنے کے لیے انہیں اپنا ذاتی لنک درکار ہوگا۔";
+          if (!confirm(question)) return;
           removePerson(p.id);
           showPicker();
         });
@@ -573,8 +733,7 @@
       $("saveNameButton").onclick = function () {
         const name = $("deviceName").value.trim().slice(0, 60);
         if (name) { person.name = name; savePeople(); }
-        contributor = person;
-        showContribution();
+        selectPerson(person);
       };
       show("nameCard");
     }
@@ -586,18 +745,16 @@
       show("registrationCard");
     }
 
-    function showContribution() {
+    function showMode() {
       if (!contributor) { showStart(); return; }
-      $("whoName").textContent = displayName(contributor);
-      $("whoId").textContent = contributor.name ? "(" + contributor.id + ")" : "";
-      $("contributionLink").value = personalLink(contributor);
-      resetContributionForm();
-      show("contributionCard");
+      clearRecording();
+      renderWhoBars();
+      show("modeCard");
     }
 
     /* ---------- Talking to Apps Script (hidden iframe + postMessage) ---------- */
 
-    let pending = null; // { kind: "register" | "contribute", timer }
+    let pending = null; // { kind, timer }
 
     function startPending(kind, timeoutMs, onTimeout) {
       clearPending();
@@ -626,12 +783,8 @@
       if (kind === "register") handleRegistrationResult(result);
       else if (kind === "contribute") handleContributionResult(result);
       else if (kind === "requestLink") handleLinkRequestResult(result);
+      else if (kind === "prompts") handlePromptsResult(result);
     });
-
-    function setStatus(box, kind, text) {
-      box.className = kind ? "status " + kind : "status";
-      box.textContent = text || "";
-    }
 
     /* ---------- Registration ---------- */
 
@@ -641,45 +794,49 @@
     let regOpenedAt = Date.now();
     let registeringName = "";
 
+    function resetRegisterButton() {
+      regButton.disabled = false;
+      setBi(regButton, "Register as a contributor", "بطور رضاکار رجسٹر کریں");
+    }
+
     regForm.addEventListener("submit", function () {
       registeringName = $("name").value.trim().slice(0, 60);
       setStatus(regStatus, "", "");
       regButton.disabled = true;
-      regButton.textContent = "Submitting…";
+      setBi(regButton, "Submitting…", "بھیجا جا رہا ہے…");
       $("regElapsedMs").value = String(Date.now() - regOpenedAt);
       startPending("register", RESPONSE_TIMEOUT_MS, function () {
         resetRegisterButton();
         setStatus(regStatus, "bad",
-          "We did not receive a confirmation from the server. Your registration may still " +
-          "have been recorded, so please do not register again yet. Contact the research team " +
-          "with your email address to obtain your Contributor ID.");
+          "We did not receive a confirmation from the server. Your registration may still have been recorded, " +
+          "so please do not register again yet. Use \"Get my personal link\" above in a few minutes.",
+          "سرور سے تصدیق موصول نہیں ہوئی۔ ہو سکتا ہے آپ کی رجسٹریشن ہو چکی ہو، اس لیے ابھی دوبارہ رجسٹر نہ کریں۔ " +
+          "چند منٹ بعد اوپر \"میرا ذاتی لنک حاصل کریں\" استعمال کریں۔");
       });
     });
-
-    function resetRegisterButton() {
-      regButton.disabled = false;
-      regButton.textContent = "Register as a contributor";
-    }
 
     function handleRegistrationResult(result) {
       resetRegisterButton();
       if (result.success && isValidId(result.contributorId) && isValidKey(result.accessKey)) {
         contributor = upsertPerson(result.contributorId, result.accessKey, registeringName);
+        promptState.skipped = new Set();
         regForm.reset();
         $("registeredId").textContent = result.contributorId;
         $("registeredLink").value = personalLink(contributor);
         show("registeredCard");
       } else if (result.success) {
         setStatus(regStatus, "bad",
-          "You are registered, but this page could not link your device. Please contact the research team.");
+          "You are registered, but this page could not link your device. Please contact the research team.",
+          "آپ کی رجسٹریشن ہو گئی ہے، لیکن یہ صفحہ آپ کے آلے کو منسلک نہیں کر سکا۔ براہِ کرم تحقیقی ٹیم سے رابطہ کریں۔");
       } else if (result.alreadyRegistered) {
         setStatus(regStatus, "info", result.message);
       } else {
-        setStatus(regStatus, "bad", result.message || "Registration could not be completed. Please try again.");
+        setStatus(regStatus, "bad", result.message ||
+          biText("Registration could not be completed. Please try again.", "رجسٹریشن مکمل نہیں ہو سکی۔ براہِ کرم دوبارہ کوشش کریں۔"));
       }
     }
 
-    $("startContributingButton").addEventListener("click", showContribution);
+    $("startContributingButton").addEventListener("click", showMode);
 
     /* ---------- Already registered? ---------- */
 
@@ -696,38 +853,37 @@
       linkOpenedAt = Date.now();
       show("signInCard");
     }
-
     function resetLinkButton() {
       linkButton.disabled = false;
-      linkButton.textContent = "Email me my link";
+      setBi(linkButton, "Email me my link", "لنک ای میل کریں");
     }
 
     linkForm.addEventListener("submit", function () {
       setStatus(linkStatus, "", "");
       linkButton.disabled = true;
-      linkButton.textContent = "Sending…";
-      // Typing an email is quick, so count time since the screen opened (min 3 s on the server).
+      setBi(linkButton, "Sending…", "بھیجا جا رہا ہے…");
       $("linkElapsedMs").value = String(Math.max(Date.now() - linkOpenedAt, 0));
       startPending("requestLink", RESPONSE_TIMEOUT_MS, function () {
         resetLinkButton();
-        setStatus(linkStatus, "bad", "We did not receive a reply from the server. Please check your internet connection and try again.");
+        setStatus(linkStatus, "bad",
+          "We did not receive a reply from the server. Please check your internet connection and try again.",
+          "سرور سے جواب نہیں ملا۔ اپنا انٹرنیٹ کنکشن چیک کر کے دوبارہ کوشش کریں۔");
       });
     });
 
     function handleLinkRequestResult(result) {
       resetLinkButton();
-      if (result.success) {
-        setStatus(linkStatus, "good", result.message);
-      } else {
-        setStatus(linkStatus, "bad", result.message || "We could not send your link. Please try again.");
-      }
+      if (result.success) setStatus(linkStatus, "good", result.message);
+      else setStatus(linkStatus, "bad", result.message ||
+        biText("We could not send your link. Please try again.", "آپ کا لنک نہیں بھیجا جا سکا۔ براہِ کرم دوبارہ کوشش کریں۔"));
     }
 
     $("pasteLinkButton").addEventListener("click", function () {
       const parsed = parseLink($("pasteLink").value);
       if (!parsed) {
         setStatus($("pasteStatus"), "bad",
-          "That does not look like a personal link. Please copy the whole link and paste it again.");
+          "That does not look like a personal link. Please copy the whole link and paste it again.",
+          "یہ ذاتی لنک نہیں لگتا۔ براہِ کرم پورا لنک کاپی کر کے دوبارہ چسپاں کریں۔");
         return;
       }
       openFromLink(addFromLink(parsed));
@@ -737,6 +893,146 @@
     $("pickerAlreadyButton").addEventListener("click", showSignIn);
     $("signInBackButton").addEventListener("click", function () {
       if (people.length) showPicker(); else showRegistration();
+    });
+
+    /* ---------- Translate & record: topics and prompts ---------- */
+
+    // Loaded once per person per visit; "done" grows as prompts are recorded.
+    const promptState = { forId: null, domains: [], byDomain: {}, done: new Set(), skipped: new Set(), domain: null, current: null };
+
+    function showDomainCardLoading() {
+      renderWhoBars();
+      $("domainList").textContent = "";
+      setStatus($("domainStatus"), "info", "Loading…", "لوڈ ہو رہا ہے…");
+      show("domainCard");
+    }
+
+    function loadPrompts() {
+      showDomainCardLoading();
+      $("promptsContributorId").value = contributor.id;
+      $("promptsAccessKey").value = contributor.key;
+      startPending("prompts", RESPONSE_TIMEOUT_MS, function () {
+        setStatus($("domainStatus"), "bad",
+          "The words could not be loaded. Please check your internet connection and try again.",
+          "الفاظ لوڈ نہیں ہو سکے۔ اپنا انٹرنیٹ کنکشن چیک کر کے دوبارہ کوشش کریں۔");
+      });
+      $("promptsForm").submit();
+    }
+
+    function handlePromptsResult(result) {
+      if (!result.success) {
+        setStatus($("domainStatus"), "bad", result.message ||
+          biText("The words could not be loaded.", "الفاظ لوڈ نہیں ہو سکے۔"));
+        return;
+      }
+      promptState.forId = contributor.id;
+      promptState.domains = result.domains || [];
+      promptState.byDomain = {};
+      (result.prompts || []).forEach(function (p) {
+        (promptState.byDomain[p.d] = promptState.byDomain[p.d] || []).push(p);
+      });
+      promptState.done = new Set(result.done || []);
+      renderDomains();
+    }
+
+    function doneCount(code) {
+      return (promptState.byDomain[code] || []).filter(function (p) { return promptState.done.has(p.id); }).length;
+    }
+
+    function renderDomains() {
+      renderWhoBars();
+      const list = $("domainList");
+      list.textContent = "";
+      if (!promptState.domains.length) {
+        setStatus($("domainStatus"), "info",
+          "No words or sentences are available yet. Please use \"Enter your own word or sentence\" for now.",
+          "ابھی کوئی الفاظ یا جملے دستیاب نہیں ہیں۔ فی الحال براہِ کرم \"اپنا لفظ یا جملہ لکھیں\" استعمال کریں۔");
+        show("domainCard");
+        return;
+      }
+      setStatus($("domainStatus"), "", "");
+      promptState.domains.forEach(function (d) {
+        const total = (promptState.byDomain[d.code] || []).length;
+        const done = doneCount(d.code);
+        const li = document.createElement("li");
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "choice" + (done >= total ? " done" : "");
+        b.setAttribute("data-domain", d.code);
+        const en = document.createElement("span"); en.className = "en"; en.textContent = (done >= total ? "✓ " : "") + d.en;
+        const ur = document.createElement("span"); ur.className = "ur"; ur.lang = "ur"; ur.textContent = d.ur;
+        const meta = document.createElement("span"); meta.className = "meta";
+        setBi(meta, done + " of " + total + " done", total + " میں سے " + done + " مکمل");
+        b.appendChild(en); b.appendChild(ur); b.appendChild(meta);
+        b.addEventListener("click", function () { startDomain(d.code); });
+        li.appendChild(b);
+        list.appendChild(li);
+      });
+      show("domainCard");
+    }
+
+    function showDomains() {
+      if (!contributor) { showStart(); return; }
+      clearRecording();
+      if (promptState.forId === contributor.id) renderDomains();
+      else loadPrompts();
+    }
+
+    function domainInfo(code) {
+      for (let i = 0; i < promptState.domains.length; i++) if (promptState.domains[i].code === code) return promptState.domains[i];
+      return { code: code, en: code, ur: "" };
+    }
+
+    function startDomain(code) {
+      promptState.domain = code;
+      nextPrompt();
+    }
+
+    function nextPrompt() {
+      const code = promptState.domain;
+      const all = promptState.byDomain[code] || [];
+      const remaining = all.filter(function (p) { return !promptState.done.has(p.id) && !promptState.skipped.has(p.id); });
+      if (!remaining.length) { showTopicDone(); return; }
+      promptState.current = remaining[0];
+      const d = domainInfo(code);
+      const p = promptState.current;
+      $("promptTopic").textContent = d.en + " · " + d.ur;
+      $("promptProgress").textContent = (doneCount(code) + 1) + " / " + all.length;
+      $("promptEn").textContent = p.en;
+      $("promptUr").textContent = p.ur;
+      const note = String(p.n || "");
+      const parts = note.split("|");
+      $("promptNote").textContent = "";
+      if (note) setBi($("promptNote"), parts[0].trim(), parts[1] ? parts[1].trim() : "");
+      openContribution("prompt");
+    }
+
+    function showTopicDone() {
+      const code = promptState.domain;
+      const d = domainInfo(code);
+      const skippedHere = (promptState.byDomain[code] || []).filter(function (p) { return promptState.skipped.has(p.id) && !promptState.done.has(p.id); });
+      setBi($("topicDoneText"),
+        skippedHere.length
+          ? "You have gone through every item in \"" + d.en + "\". You skipped " + skippedHere.length + "."
+          : "You have recorded every item in \"" + d.en + "\". Thank you!",
+        skippedHere.length
+          ? "آپ نے \"" + d.ur + "\" کے تمام الفاظ دیکھ لیے۔ آپ نے " + skippedHere.length + " چھوڑے۔"
+          : "آپ نے \"" + d.ur + "\" کے تمام الفاظ ریکارڈ کر دیے۔ شکریہ!");
+      $("showSkippedButton").classList.toggle("hidden", !skippedHere.length);
+      clearRecording();
+      show("topicDoneCard");
+    }
+
+    $("showSkippedButton").addEventListener("click", function () {
+      (promptState.byDomain[promptState.domain] || []).forEach(function (p) { promptState.skipped.delete(p.id); });
+      nextPrompt();
+    });
+    $("topicDoneChooseButton").addEventListener("click", showDomains);
+
+    $("skipButton").addEventListener("click", function () {
+      if (pending || !promptState.current) return;
+      promptState.skipped.add(promptState.current.id);
+      nextPrompt();
     });
 
     /* ---------- Audio recorder ---------- */
@@ -759,7 +1055,6 @@
       }
       return "";
     }
-
     function formatSeconds(s) {
       s = Math.floor(s);
       return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
@@ -767,7 +1062,8 @@
 
     recordButton.addEventListener("click", async function () {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
-        recState.textContent = "This browser cannot record audio. Please use Chrome, Firefox, Edge or Safari.";
+        setBi(recState, "This browser cannot record audio. Please use Chrome, Firefox, Edge or Safari.",
+          "یہ براؤزر آواز ریکارڈ نہیں کر سکتا۔ براہِ کرم کروم، فائر فاکس، ایج یا سفاری استعمال کریں۔");
         return;
       }
       try {
@@ -775,7 +1071,8 @@
           audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: true }
         });
       } catch (err) {
-        recState.textContent = "Microphone access was blocked. Please allow the microphone for this site and try again.";
+        setBi(recState, "Microphone access was blocked. Please allow the microphone for this site and try again.",
+          "مائیکروفون کی اجازت نہیں ملی۔ اس ویب سائٹ کے لیے مائیکروفون کی اجازت دیں اور دوبارہ کوشش کریں۔");
         return;
       }
       const mime = pickMimeType();
@@ -796,11 +1093,12 @@
       discardButton.classList.add("hidden");
       stopButton.classList.remove("hidden");
       playback.classList.add("hidden");
-      recState.innerHTML = '<span class="rec-dot"></span>Recording <span class="rec-time">0:00</span>';
-      recTick = setInterval(function () {
-        const t = recState.querySelector(".rec-time");
-        if (t) t.textContent = formatSeconds((Date.now() - recStartedAt) / 1000);
-      }, 250);
+      const tick = function () {
+        const t = formatSeconds((Date.now() - recStartedAt) / 1000);
+        setBi(recState, "● Recording " + t, "ریکارڈنگ جاری ہے " + t);
+      };
+      tick();
+      recTick = setInterval(tick, 500);
       recAutoStop = setTimeout(stopRecording, MAX_RECORD_SECONDS * 1000);
     });
 
@@ -825,7 +1123,7 @@
       if (!blob.size) {
         recording = null;
         recordButton.classList.remove("hidden");
-        recState.textContent = "Nothing was recorded. Please try again.";
+        setBi(recState, "Nothing was recorded. Please try again.", "کچھ ریکارڈ نہیں ہوا۔ براہِ کرم دوبارہ کوشش کریں۔");
         return;
       }
       recording = { blob: blob, mime: type.split(";")[0].trim().toLowerCase(), seconds: Math.round(seconds * 10) / 10 };
@@ -833,7 +1131,8 @@
       playback.src = URL.createObjectURL(blob);
       playback.classList.remove("hidden");
       discardButton.classList.remove("hidden");
-      recState.textContent = "Recorded " + formatSeconds(seconds) + ". Listen to check it, then submit.";
+      setBi(recState, "Recorded " + formatSeconds(seconds) + ". Listen to check it, then submit.",
+        "ریکارڈنگ مکمل (" + formatSeconds(seconds) + ")۔ سن کر جانچ لیں، پھر جمع کریں۔");
     }
 
     function clearRecording() {
@@ -862,12 +1161,35 @@
       });
     }
 
-    /* ---------- Contribution ---------- */
+    /* ---------- Contribution form (own text or a given prompt) ---------- */
 
     const conForm = $("contributionForm");
     const conButton = $("contributeButton");
     const conStatus = $("conStatus");
     let conOpenedAt = Date.now();
+    let conMode = "own";   // "own" | "prompt"
+
+    function openContribution(mode) {
+      if (!contributor) { showStart(); return; }
+      conMode = mode;
+      const isPrompt = mode === "prompt";
+      $("ownIntro").classList.toggle("hidden", isPrompt);
+      $("promptIntro").classList.toggle("hidden", !isPrompt);
+      $("meaningSection").classList.toggle("hidden", isPrompt);
+      $("skipButton").classList.toggle("hidden", !isPrompt);
+      const back = $("contributionBackButton");
+      back.textContent = "";
+      const inner = document.createElement("span");
+      inner.className = "inline-bi";
+      if (isPrompt) setBi(inner, "← Topics", "موضوعات");
+      else setBi(inner, "← Activities", "سرگرمیاں");
+      back.appendChild(inner);
+      renderWhoBars();
+      $("contributionLink").value = personalLink(contributor);
+      setStatus(conStatus, "", "");
+      resetContributionForm();
+      show("contributionCard");
+    }
 
     function resetContributionForm() {
       conForm.reset();
@@ -875,14 +1197,15 @@
       $("audioData").value = "";
       $("audioData").disabled = true;
       $("hasAudio").value = "no";
-      setStatus(conStatus, "", "");
+      $("conPromptId").value = conMode === "prompt" && promptState.current ? promptState.current.id : "";
       resetContributeButton();
       conOpenedAt = Date.now();
     }
 
     function resetContributeButton() {
       conButton.disabled = false;
-      conButton.textContent = "Submit";
+      if (conMode === "prompt") setBi(conButton, "Submit & next →", "جمع کریں اور اگلا");
+      else setBi(conButton, "Submit", "جمع کریں");
     }
 
     function val(id) { return $(id).value.trim(); }
@@ -893,54 +1216,56 @@
       if (!contributor) { showStart(); return; }
 
       if (!val("roman")) {
-        setStatus(conStatus, "bad", "Please write the Purgi word or sentence in Roman script.");
+        setStatus(conStatus, "bad", "Please write the Purgi word or sentence in Roman script.",
+          "براہِ کرم پرگی لفظ یا جملہ رومن رسم الخط میں لکھیں۔");
         $("roman").focus();
         return;
       }
-      if (!val("english") && !val("urduHindi") && !val("tibetan") && !val("persoArabic")) {
-        setStatus(conStatus, "bad", "Please give a meaning, or write the entry in Urdu or Tibetan script.");
+      if (conMode === "own" && !val("english") && !val("urduHindi") && !val("tibetan") && !val("persoArabic")) {
+        setStatus(conStatus, "bad", "Please give a meaning, or write the entry in Urdu or Tibetan script.",
+          "براہِ کرم مطلب لکھیں، یا اندراج اردو یا تبتی رسم الخط میں لکھیں۔");
         return;
       }
       if (mediaRecorder) {
-        setStatus(conStatus, "bad", "Please stop the recording before submitting.");
+        setStatus(conStatus, "bad", "Please stop the recording before submitting.",
+          "جمع کرنے سے پہلے ریکارڈنگ روکیں۔");
         return;
       }
-      if (!recording && !confirm("You have not recorded the pronunciation. Submit without audio?")) {
+      if (!recording) {
+        setStatus(conStatus, "bad", "Please record the pronunciation before submitting.",
+          "جمع کرنے سے پہلے براہِ کرم تلفظ ریکارڈ کریں۔");
         return;
       }
 
       conButton.disabled = true;
-      conButton.textContent = recording ? "Uploading…" : "Submitting…";
+      setBi(conButton, "Uploading…", "اپلوڈ ہو رہا ہے…");
       setStatus(conStatus, "", "");
 
       $("conContributorId").value = contributor.id;
       $("conAccessKey").value = contributor.key;
-      if (recording) {
-        try {
-          $("audioData").value = await blobToBase64(recording.blob);
-        } catch (e) {
-          resetContributeButton();
-          setStatus(conStatus, "bad", "The recording could not be prepared. Please record it again.");
-          return;
-        }
-        $("audioData").disabled = false;
-        $("hasAudio").value = "yes";
-        $("audioMime").value = recording.mime;
-        $("audioDuration").value = String(recording.seconds);
-      } else {
-        $("audioData").value = "";
-        $("audioData").disabled = true;
-        $("hasAudio").value = "no";
-        $("audioMime").value = "";
-        $("audioDuration").value = "";
+      $("conPromptId").value = conMode === "prompt" && promptState.current ? promptState.current.id : "";
+      if (conMode === "prompt") { $("english").value = ""; $("urduHindi").value = ""; }
+      try {
+        $("audioData").value = await blobToBase64(recording.blob);
+      } catch (e) {
+        resetContributeButton();
+        setStatus(conStatus, "bad", "The recording could not be prepared. Please record it again.",
+          "ریکارڈنگ تیار نہیں ہو سکی۔ براہِ کرم دوبارہ ریکارڈ کریں۔");
+        return;
       }
-      $("conElapsedMs").value = String(Date.now() - conOpenedAt);
+      $("audioData").disabled = false;
+      $("hasAudio").value = "yes";
+      $("audioMime").value = recording.mime;
+      $("audioDuration").value = String(recording.seconds);
+      $("conElapsedMs").value = String(Math.max(Date.now() - conOpenedAt, 3000));
 
       startPending("contribute", UPLOAD_TIMEOUT_MS, function () {
         resetContributeButton();
         setStatus(conStatus, "bad",
-          "We did not receive a confirmation from the server. Please check your internet " +
-          "connection. Your entry may already have been saved, so wait a minute before submitting it again.");
+          "We did not receive a confirmation from the server. Please check your internet connection. " +
+          "Your entry may already have been saved, so wait a minute before submitting it again.",
+          "سرور سے تصدیق موصول نہیں ہوئی۔ اپنا انٹرنیٹ کنکشن چیک کریں۔ ہو سکتا ہے آپ کا اندراج محفوظ ہو چکا ہو، " +
+          "اس لیے دوبارہ بھیجنے سے پہلے ایک منٹ انتظار کریں۔");
       });
       conForm.submit();
     });
@@ -949,21 +1274,44 @@
       resetContributeButton();
       $("audioData").value = "";       // free memory
       $("audioData").disabled = true;
+      if (conMode === "prompt" && promptState.current) {
+        const already = !result.success && /already recorded/i.test(result.message || "");
+        if (result.success || already) {
+          promptState.done.add(promptState.current.id);
+          nextPrompt();
+          setStatus(conStatus, "good",
+            already ? "You had already recorded that one. Here is the next." : "Saved ✓ " + (result.contributionId || "") + ". Here is the next one.",
+            already ? "وہ آپ پہلے ہی ریکارڈ کر چکے تھے۔ یہ اگلا ہے۔" : "محفوظ ہو گیا ✓ ۔ یہ اگلا ہے۔");
+          return;
+        }
+        setStatus(conStatus, "bad", result.message ||
+          biText("Your recording could not be saved. Please try again.", "آپ کی ریکارڈنگ محفوظ نہیں ہو سکی۔ براہِ کرم دوبارہ کوشش کریں۔"));
+        return;
+      }
       if (result.success) {
         $("savedId").textContent = result.contributionId || "";
-        $("savedAudioNote").textContent = result.audioSaved
-          ? "Your pronunciation recording was saved with this entry."
-          : "This entry was saved without an audio recording.";
         clearRecording();
         show("savedCard");
       } else {
-        setStatus(conStatus, "bad", result.message || "Your contribution could not be saved. Please try again.");
+        setStatus(conStatus, "bad", result.message ||
+          biText("Your contribution could not be saved. Please try again.", "آپ کا حصہ محفوظ نہیں ہو سکا۔ براہِ کرم دوبارہ کوشش کریں۔"));
       }
     }
 
-    $("anotherButton").addEventListener("click", showContribution);
-
-    $("switchButton").addEventListener("click", showPicker);
+    // From the activity screen, always fetch the latest list (newly switched-on topics appear).
+    $("modePromptsButton").addEventListener("click", function () {
+      if (!contributor || pending) return;
+      clearRecording();
+      loadPrompts();
+    });
+    $("modeOwnButton").addEventListener("click", function () { openContribution("own"); });
+    $("domainBackButton").addEventListener("click", showMode);
+    $("contributionBackButton").addEventListener("click", function () {
+      if (pending) return;
+      if (conMode === "prompt") showDomains(); else showMode();
+    });
+    $("anotherButton").addEventListener("click", function () { openContribution("own"); });
+    $("savedModeButton").addEventListener("click", showMode);
     $("savedSwitchButton").addEventListener("click", showPicker);
     $("addPersonButton").addEventListener("click", showRegistration);
     $("backToListButton").addEventListener("click", showPicker);
@@ -971,11 +1319,12 @@
     /* ---------- Copy buttons ---------- */
 
     document.querySelectorAll("[data-copy]").forEach(function (button) {
+      setBi(button, "Copy link", "لنک کاپی کریں");
       button.addEventListener("click", function () {
         const input = $(button.getAttribute("data-copy"));
         const done = function () {
-          button.textContent = "Copied";
-          setTimeout(function () { button.textContent = "Copy link"; }, 2000);
+          setBi(button, "Copied", "کاپی ہو گیا");
+          setTimeout(function () { setBi(button, "Copy link", "لنک کاپی کریں"); }, 2000);
         };
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(input.value).then(done, function () { input.select(); });
@@ -988,9 +1337,12 @@
 
     /* ---------- Start ---------- */
 
+    resetRegisterButton();
+    resetLinkButton();
+
     function openFromLink(linked) {
       if (linked.needsName) showNameCard(linked.person);
-      else { contributor = linked.person; showContribution(); }
+      else selectPerson(linked.person);
     }
 
     // A personal link pasted into a tab that already has this page open only changes the #part.

@@ -162,6 +162,11 @@
     .consent-choice input { width:auto; margin-top:7px; transform:scale(1.2); }
     textarea.long { min-height:220px; }
     footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
+    footer a, .about a { color:var(--blue); }
+    .about { text-align:left; margin:16px auto 0; max-width:720px; border-top:1px solid var(--line); padding-top:12px; }
+    .about summary { cursor:pointer; font-weight:700; color:var(--navy); text-align:center; list-style-position:inside; }
+    .about p { margin:12px 0 0; font-size:15px; }
+    .about .ur { text-align:right; }
     @media (max-width:650px) {
       body { font-size:16px; }
       .page { margin:14px auto; padding:0 12px 28px; }
@@ -182,6 +187,17 @@
       </div>
       <h1 class="center"><span class="en">Purgi Language Documentation Project</span><span class="ur" lang="ur">پرگی زبان دستاویزی منصوبہ</span></h1>
       <p class="subtitle center"><span class="en">Volunteer registration and language documentation</span><span class="ur" lang="ur">رضاکاروں کی رجسٹریشن اور زبان کی دستاویز بندی</span></p>
+      <details class="about" id="aboutProject">
+        <summary><span class="inline-bi"><span class="en">About this project</span><span class="ur" lang="ur">اس منصوبے کے بارے میں</span></span></summary>
+        <p>
+          <span class="en">The Purgi Language Documentation Project records and preserves the Purgi language (پُرگی / པུར་གི) through words, sentences and audio contributed by native speakers. The project is part of doctoral research by Anwar Hussain, Assistant Professor, under the guidance of Dr. Mehboob Ali, Coordinator, both of the Department of Computer Science &amp; IT, University of Ladakh. Your contributions will be used for language preservation and academic research, including speech technology for Purgi. All recordings are stored securely and used only for these purposes.</span>
+          <span class="ur" lang="ur">پرگی زبان دستاویزی منصوبہ مقامی بولنے والوں کی جانب سے فراہم کردہ الفاظ، جملوں اور آڈیو کے ذریعے پرگی زبان (پُرگی / པུར་གི) کو ریکارڈ اور محفوظ کرتا ہے۔ یہ منصوبہ جامعہ لداخ کے شعبۂ کمپیوٹر سائنس و آئی ٹی کے اسسٹنٹ پروفیسر انور حسین کی ڈاکٹریٹ تحقیق کا حصہ ہے، جو اسی شعبے کے کوآرڈینیٹر ڈاکٹر محبوب علی کی نگرانی میں کی جا رہی ہے۔ آپ کا حصہ زبان کے تحفظ اور علمی تحقیق، بشمول پرگی کے لیے اسپیچ ٹیکنالوجی، میں استعمال ہوگا۔ تمام ریکارڈنگز محفوظ طریقے سے رکھی جاتی ہیں اور صرف انہی مقاصد کے لیے استعمال ہوتی ہیں۔</span>
+        </p>
+        <p>
+          <span class="en">For questions, write to <a href="mailto:anwar001@uol.ac.in" dir="ltr">anwar001@uol.ac.in</a>.</span>
+          <span class="ur" lang="ur">سوالات کے لیے اس پتے پر لکھیں: <a href="mailto:anwar001@uol.ac.in" dir="ltr">anwar001@uol.ac.in</a></span>
+        </p>
+      </details>
     </header>
 
     <!-- ============ WHO IS CONTRIBUTING (shared devices) ============ -->
@@ -253,8 +269,8 @@
       </div>
       <h2><span class="en">Contributor Registration</span><span class="ur" lang="ur">رضاکار رجسٹریشن</span></h2>
       <p class="intro">
-        <span class="en">Register as a volunteer contributor to help document پُرگی / པུར་གི. Registration is open to adults aged 18 and above. You register only once.</span>
-        <span class="ur" lang="ur">پرگی زبان کی دستاویز بندی میں مدد کے لیے بطور رضاکار رجسٹر کریں۔ رجسٹریشن صرف 18 سال اور اس سے زیادہ عمر کے افراد کے لیے ہے۔ رجسٹریشن صرف ایک بار کرنی ہوتی ہے۔</span>
+        <span class="en">Register as a volunteer contributor to help document پُرگی / པུར་གི. Registration is open to adults aged 18 and above. You register only once. Please read “About this project” at the top of the page.</span>
+        <span class="ur" lang="ur">پرگی زبان کی دستاویز بندی میں مدد کے لیے بطور رضاکار رجسٹر کریں۔ رجسٹریشن صرف 18 سال اور اس سے زیادہ عمر کے افراد کے لیے ہے۔ رجسٹریشن صرف ایک بار کرنی ہوتی ہے۔ براہِ کرم صفحے کے اوپر ”اس منصوبے کے بارے میں“ پڑھ لیں۔</span>
       </p>
 
       <form id="registrationForm"
@@ -323,6 +339,10 @@
             <span><span class="en">I am at least 18 years old and I have read and agree to the above consent statement.</span>
                   <span class="ur" lang="ur">میری عمر کم از کم 18 سال ہے اور میں نے اوپر دیا گیا رضامندی نامہ پڑھ لیا ہے اور اس سے متفق ہوں۔</span></span>
           </label>
+          <p class="small" style="margin:10px 0 0">
+            <span class="en">To withdraw your contributions or ask a question, write to <a href="mailto:anwar001@uol.ac.in" dir="ltr">anwar001@uol.ac.in</a>.</span>
+            <span class="ur" lang="ur">اپنا حصہ واپس لینے یا کوئی سوال پوچھنے کے لیے اس پتے پر لکھیں: <a href="mailto:anwar001@uol.ac.in" dir="ltr">anwar001@uol.ac.in</a></span>
+          </p>
         </div>
 
         <p class="small">
@@ -622,7 +642,9 @@
     </section>
 
     <footer>
-      پُرگی | པུར་གི · Purgi Language Documentation Project
+      پُرگی | པུར་གི · Purgi Language Documentation Project<br>
+      Department of Computer Science &amp; IT, University of Ladakh<br>
+      Contact: <a href="mailto:anwar001@uol.ac.in" dir="ltr">anwar001@uol.ac.in</a>
     </footer>
   </main>
 

@@ -99,10 +99,14 @@
     .small { font-size:14px; color:var(--muted); }
     .hidden { display:none !important; }
     .big-id { font-size:26px; font-weight:700; color:var(--navy); word-break:break-word; margin:6px 0 14px; }
-    .who {
-      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
-      background:var(--soft); border-radius:9px; padding:8px 14px; margin-bottom:18px; font-size:15px;
+    .appbar {
+      display:flex; align-items:center; flex-wrap:wrap; gap:10px 14px;
+      background:var(--soft); border-radius:10px; padding:8px 10px; margin-bottom:18px; font-size:15px;
     }
+    .appbar .menu-btn { padding:7px 14px; font-size:15px; }
+    .appbar .menu-btn .ur { font-size:15px; line-height:1.8; }
+    .appbar .who-text { flex:1; min-width:180px; }
+    .appbar .who-text .ur { font-size:15px; line-height:1.9; }
     .topnav { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; }
     .linkbox { display:flex; gap:8px; margin:10px 0 4px; }
     .linkbox input { font-size:13px; padding:9px 10px; }
@@ -153,6 +157,10 @@
     @keyframes blink { 50% { opacity:.2; } }
     #recState { flex-basis:100%; }
     audio { width:100%; margin-top:12px; }
+    .choice .icon { font-size:22px; margin-right:6px; }
+    .consent-choice label { display:flex; gap:10px; align-items:flex-start; font-weight:400; margin-bottom:10px; }
+    .consent-choice input { width:auto; margin-top:7px; transform:scale(1.2); }
+    textarea.long { min-height:220px; }
     footer { text-align:center; color:var(--muted); font-size:13px; padding:10px; }
     @media (max-width:650px) {
       body { font-size:16px; }
@@ -348,28 +356,30 @@
 
     <!-- ============ WHAT WOULD YOU LIKE TO DO? ============ -->
     <section class="card hidden" id="modeCard">
-      <div class="who"></div>
+      <div class="appbar" data-home="1"></div>
       <h2><span class="en">What would you like to do?</span><span class="ur" lang="ur">آپ کیا کرنا چاہیں گے؟</span></h2>
       <ul class="choice-list">
         <li><button type="button" class="choice mode-choice" id="modePromptsButton">
-          <span class="en">Translate &amp; record given words and sentences</span>
+          <span class="en"><span class="icon">①</span>Translate &amp; record given words and sentences</span>
           <span class="ur" lang="ur">دیے گئے الفاظ اور جملوں کا پرگی میں ترجمہ اور ریکارڈنگ</span>
           <span class="meta"><span class="en">We show you simple words and sentences in English and Urdu; you say them in Purgi.</span><span class="ur" lang="ur">ہم آپ کو انگریزی اور اردو میں آسان الفاظ اور جملے دکھائیں گے، آپ انہیں پرگی میں بولیں گے۔</span></span>
         </button></li>
         <li><button type="button" class="choice mode-choice" id="modeOwnButton">
-          <span class="en">Enter your own word or sentence</span>
+          <span class="en"><span class="icon">②</span>Enter your own word or sentence</span>
           <span class="ur" lang="ur">اپنا لفظ یا جملہ لکھیں</span>
           <span class="meta"><span class="en">Write any Purgi word or sentence you know, and record it.</span><span class="ur" lang="ur">کوئی بھی پرگی لفظ یا جملہ جو آپ جانتے ہیں لکھیں اور ریکارڈ کریں۔</span></span>
+        </button></li>
+        <li><button type="button" class="choice mode-choice" id="modeCreativeButton">
+          <span class="en"><span class="icon">③</span>Share your creative writing</span>
+          <span class="ur" lang="ur">اپنی تخلیقی تحریر شامل کریں</span>
+          <span class="meta"><span class="en">Ghazal, poem, song, marsiya, afsana, folk tale … write it and recite it.</span><span class="ur" lang="ur">غزل، نظم، گیت، مرثیہ، افسانہ، لوک کہانی … لکھیں اور پڑھ کر سنائیں۔</span></span>
         </button></li>
       </ul>
     </section>
 
     <!-- ============ CHOOSE A TOPIC ============ -->
     <section class="card hidden" id="domainCard">
-      <div class="topnav">
-        <button type="button" class="link" id="domainBackButton"><span class="inline-bi"><span class="en">← Activities</span><span class="ur" lang="ur">سرگرمیاں</span></span></button>
-      </div>
-      <div class="who"></div>
+      <div class="appbar"></div>
       <h2><span class="en">Choose a topic</span><span class="ur" lang="ur">موضوع منتخب کریں</span></h2>
       <div id="domainStatus" class="status" role="status" aria-live="polite"></div>
       <ul class="choice-list" id="domainList"></ul>
@@ -377,10 +387,10 @@
 
     <!-- ============ CONTRIBUTION (own text or a given prompt) ============ -->
     <section class="card hidden" id="contributionCard">
+      <div class="appbar"></div>
       <div class="topnav">
         <button type="button" class="link" id="contributionBackButton"></button>
       </div>
-      <div class="who"></div>
 
       <div id="ownIntro">
         <h2><span class="en">Contribute a Purgi word or sentence</span><span class="ur" lang="ur">پرگی لفظ یا جملہ شامل کریں</span></h2>
@@ -398,8 +408,8 @@
           <div class="prompt-ur" id="promptUr" lang="ur"></div>
           <div class="prompt-note" id="promptNote"></div>
         </div>
-        <p class="intro"><span class="en">Say this in Purgi, the way you would naturally say it. Then write it below and record it.</span>
-           <span class="ur" lang="ur">اسے پرگی میں اسی طرح کہیے جیسے آپ عام طور پر بولتے ہیں۔ پھر نیچے لکھیں اور ریکارڈ کریں۔</span></p>
+        <p class="intro"><span class="en">Say this in Purgi, the way you would naturally say it (as a man or a woman). Then write it below and record it.</span>
+           <span class="ur" lang="ur">اسے پرگی میں اسی طرح کہیے جیسے آپ عام طور پر بولتے ہیں (مرد یا خاتون کے طور پر)۔ پھر نیچے لکھیں اور ریکارڈ کریں۔</span></p>
       </div>
 
       <form id="contributionForm"
@@ -452,9 +462,9 @@
         </div>
 
         <h3><span class="en">Pronunciation <span class="required">*</span></span><span class="ur" lang="ur">تلفظ <span class="required">*</span></span></h3>
-        <div class="recorder">
-          <p class="small" style="margin-top:0"><span class="en">Say it clearly, in a quiet place. Maximum 60 seconds.</span>
-             <span class="ur" lang="ur">کسی پرسکون جگہ پر صاف آواز میں بولیں۔ زیادہ سے زیادہ 60 سیکنڈ۔</span></p>
+        <div id="ownRecorderSlot">
+        <div class="recorder" id="recorderBox">
+          <p class="small" style="margin-top:0" id="recorderHint"></p>
           <div class="rec-row">
             <button type="button" class="rec-btn" id="recordButton"><span class="en">● Record</span><span class="ur" lang="ur">ریکارڈ کریں</span></button>
             <button type="button" class="hidden" id="stopButton"><span class="en">■ Stop</span><span class="ur" lang="ur">روکیں</span></button>
@@ -462,6 +472,7 @@
             <span id="recState" class="small" aria-live="polite"></span>
           </div>
           <audio id="playback" controls class="hidden"></audio>
+        </div>
         </div>
 
         <div class="button-row" style="margin-top:22px">
@@ -487,8 +498,8 @@
       <h2><span class="en">Thank you, your contribution was saved</span><span class="ur" lang="ur">شکریہ، آپ کا حصہ محفوظ ہو گیا</span></h2>
       <p><span class="inline-bi"><span class="en">Contribution ID</span><span class="ur" lang="ur">شراکت آئی ڈی</span></span>: <strong id="savedId"></strong></p>
       <div class="button-row" style="margin-top:18px">
-        <button type="button" id="anotherButton"><span class="en">Submit another response</span><span class="ur" lang="ur">ایک اور جمع کریں</span></button>
-        <button type="button" class="secondary" id="savedModeButton"><span class="en">Choose another activity</span><span class="ur" lang="ur">دوسری سرگرمی منتخب کریں</span></button>
+        <button type="button" id="anotherButton"><span class="en">Continue: add another word or sentence →</span><span class="ur" lang="ur">جاری رکھیں: ایک اور لفظ یا جملہ</span></button>
+        <button type="button" class="secondary" id="savedModeButton"><span class="en">☰ Main menu</span><span class="ur" lang="ur">مینو</span></button>
         <button type="button" class="secondary" id="savedSwitchButton"><span class="en">Switch person</span><span class="ur" lang="ur">شخص تبدیل کریں</span></button>
       </div>
     </section>
@@ -500,6 +511,110 @@
       <div class="button-row" style="margin-top:18px">
         <button type="button" id="topicDoneChooseButton"><span class="en">Choose another topic</span><span class="ur" lang="ur">دوسرا موضوع منتخب کریں</span></button>
         <button type="button" class="secondary hidden" id="showSkippedButton"><span class="en">Show skipped ones again</span><span class="ur" lang="ur">چھوڑے ہوئے دوبارہ دکھائیں</span></button>
+        <button type="button" class="secondary" id="topicDoneMenuButton"><span class="en">☰ Main menu</span><span class="ur" lang="ur">مینو</span></button>
+      </div>
+    </section>
+
+    <!-- ============ CREATIVE WRITING ============ -->
+    <section class="card hidden" id="creativeCard">
+      <div class="appbar"></div>
+      <h2><span class="en">Share your creative writing</span><span class="ur" lang="ur">اپنی تخلیقی تحریر شامل کریں</span></h2>
+      <p class="intro"><span class="en">Submit one piece at a time: a ghazal, poem, song, marsiya, afsana, folk tale or anything else in Purgi. Write it, then record yourself reciting it.</span>
+         <span class="ur" lang="ur">ایک وقت میں ایک تحریر بھیجیں: غزل، نظم، گیت، مرثیہ، افسانہ، لوک کہانی یا پرگی میں کوئی اور تحریر۔ اسے لکھیں، پھر خود پڑھ کر ریکارڈ کریں۔</span></p>
+
+      <form id="creativeForm" action="https://script.google.com/macros/s/AKfycbxLznMWthZTOPp_Hx3fK_9-FSQO3MxV-YtnaNXQ9VfWiJvM5GWLotQ21IRgMWhyrVchZw/exec"
+            method="post" target="submissionFrame" accept-charset="UTF-8" novalidate>
+        <input type="hidden" name="action" value="creative">
+        <input type="hidden" name="contributorId" id="crContributorId">
+        <input type="hidden" name="accessKey" id="crAccessKey">
+        <input type="hidden" name="formElapsedMs" id="crElapsedMs">
+        <input type="hidden" name="hasAudio" id="crHasAudio" value="no">
+        <input type="hidden" name="audio" id="crAudioData" disabled>
+        <input type="hidden" name="mimeType" id="crAudioMime">
+        <input type="hidden" name="durationSeconds" id="crAudioDuration">
+        <div class="hidden" aria-hidden="true">
+          <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <div class="grid">
+          <div class="field">
+            <label for="genre"><span class="en">Type of writing <span class="required">*</span></span><span class="ur" lang="ur">تحریر کی قسم <span class="required">*</span></span></label>
+            <select id="genre" name="genre">
+              <option value="">Choose · منتخب کریں</option>
+              <option value="Ghazal">Ghazal · غزل</option>
+              <option value="Nazm / Poem">Nazm / Poem · نظم</option>
+              <option value="Song / Folk song">Song / Folk song · گیت / لوک گیت</option>
+              <option value="Qasida / Manqabat">Qasida / Manqabat · قصیدہ / منقبت</option>
+              <option value="Marsiya / Noha">Marsiya / Noha · مرثیہ / نوحہ</option>
+              <option value="Short story / Afsana">Short story / Afsana · افسانہ</option>
+              <option value="Folk tale">Folk tale · لوک کہانی</option>
+              <option value="Essay">Essay · مضمون</option>
+              <option value="Other">Other · دیگر</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="crTitle"><span class="en">Title <span class="required">*</span></span><span class="ur" lang="ur">عنوان <span class="required">*</span></span></label>
+            <input id="crTitle" name="title" maxlength="200" dir="auto">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="crTextUrdu"><span class="en">Text in Urdu (Perso-Arabic) script</span><span class="ur" lang="ur">متن، اردو (فارسی عربی) رسم الخط میں</span></label>
+          <span class="hint"><span class="en">Write it in at least one script: Urdu, Roman or Tibetan.</span><span class="ur" lang="ur">کم از کم ایک رسم الخط میں لکھیں: اردو، رومن یا تبتی۔</span></span>
+          <textarea id="crTextUrdu" name="textPersoArabic" class="urdu-input long" lang="ur" dir="rtl" maxlength="45000"></textarea>
+        </div>
+        <div class="grid">
+          <div class="field">
+            <label for="crTextRoman"><span class="en">Text in Roman script (optional)</span><span class="ur" lang="ur">متن، رومن رسم الخط میں (اختیاری)</span></label>
+            <textarea id="crTextRoman" name="textRoman" maxlength="45000"></textarea>
+          </div>
+          <div class="field">
+            <label for="crTextTibetan"><span class="en">Text in Tibetan script (optional)</span><span class="ur" lang="ur">متن، تبتی رسم الخط میں (اختیاری)</span></label>
+            <textarea id="crTextTibetan" name="textTibetan" class="tibetan" lang="bo" maxlength="45000"></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label for="crSummary"><span class="en">Short summary or translation in English or Urdu (optional)</span><span class="ur" lang="ur">انگریزی یا اردو میں مختصر خلاصہ یا ترجمہ (اختیاری)</span></label>
+          <textarea id="crSummary" name="summary" dir="auto" maxlength="45000"></textarea>
+        </div>
+
+        <fieldset class="consent-choice">
+          <legend><span class="en">Whose work is this? <span class="required">*</span></span><span class="ur" lang="ur">یہ کس کی تخلیق ہے؟ <span class="required">*</span></span></legend>
+          <label><input type="radio" name="authorship" value="OWN_WORK">
+            <span><span class="en">My own work. I am the author.</span><span class="ur" lang="ur">یہ میری اپنی تخلیق ہے۔ میں اس کا مصنف ہوں۔</span></span></label>
+          <label><input type="radio" name="authorship" value="TRADITIONAL">
+            <span><span class="en">Traditional / folk. I am reciting or narrating it.</span><span class="ur" lang="ur">یہ روایتی یا لوک تخلیق ہے۔ میں اسے پڑھ کر یا بیان کر کے سنا رہا ہوں۔</span></span></label>
+        </fieldset>
+        <div class="field hidden" id="penNameField">
+          <label for="crPenName"><span class="en">Pen name / takhallus (optional)</span><span class="ur" lang="ur">قلمی نام / تخلص (اختیاری)</span></label>
+          <input id="crPenName" name="penName" maxlength="80" dir="auto">
+        </div>
+
+        <fieldset class="consent-choice">
+          <legend><span class="en">How may this piece be used? <span class="required">*</span></span><span class="ur" lang="ur">یہ تحریر کس طرح استعمال ہو سکتی ہے؟ <span class="required">*</span></span></legend>
+          <label><input type="radio" name="publication" value="RESEARCH_ONLY">
+            <span><span class="en">For research only. Do not publish it.</span><span class="ur" lang="ur">صرف تحقیق کے لیے۔ اسے شائع نہ کیا جائے۔</span></span></label>
+          <label><input type="radio" name="publication" value="PUBLISH_WITH_CREDIT">
+            <span id="publishLabel"></span></label>
+        </fieldset>
+
+        <h3><span class="en">Recitation <span class="required">*</span></span><span class="ur" lang="ur">پڑھ کر سنائیں <span class="required">*</span></span></h3>
+        <div id="creativeRecorderSlot"></div>
+
+        <div class="button-row" style="margin-top:22px">
+          <button id="creativeButton" type="submit"></button>
+        </div>
+        <div id="creativeStatus" class="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- ============ CREATIVE WORK SAVED ============ -->
+    <section class="card hidden" id="creativeSavedCard">
+      <h2><span class="en">Thank you, your piece was saved</span><span class="ur" lang="ur">شکریہ، آپ کی تحریر محفوظ ہو گئی</span></h2>
+      <p><span class="inline-bi"><span class="en">Work ID</span><span class="ur" lang="ur">تحریر آئی ڈی</span></span>: <strong id="creativeSavedId"></strong></p>
+      <div class="button-row" style="margin-top:18px">
+        <button type="button" id="creativeAnotherButton"><span class="en">Continue: submit another piece →</span><span class="ur" lang="ur">جاری رکھیں: ایک اور تحریر</span></button>
+        <button type="button" class="secondary" id="creativeMenuButton"><span class="en">☰ Main menu</span><span class="ur" lang="ur">مینو</span></button>
       </div>
     </section>
 
@@ -524,14 +639,16 @@
     "use strict";
 
     const RESPONSE_TIMEOUT_MS = 30000;
-    const UPLOAD_TIMEOUT_MS = 90000;     // contributions carry audio
-    const MAX_RECORD_SECONDS = 60;
+    const UPLOAD_TIMEOUT_MS = 120000;          // words & sentences with audio
+    const CREATIVE_UPLOAD_TIMEOUT_MS = 420000; // recitations up to 10 minutes
+    const SLOW_NOTICE_AFTER_MS = 20000;        // tell the volunteer their connection is slow
     const STORAGE_KEY = "purgiContributors";      // everyone registered on this device
     const OLD_STORAGE_KEY = "purgiContributor";   // single-person storage from an earlier version
 
     const $ = function (id) { return document.getElementById(id); };
     const cards = ["pickerCard", "nameCard", "signInCard", "registrationCard", "registeredCard",
-                   "modeCard", "domainCard", "contributionCard", "savedCard", "topicDoneCard"];
+                   "modeCard", "domainCard", "contributionCard", "savedCard", "topicDoneCard",
+                   "creativeCard", "creativeSavedCard"];
 
     /* ---------- English + Urdu helpers ---------- */
 
@@ -644,17 +761,26 @@
       window.scrollTo(0, 0);
     }
 
-    // The "Contributing as …" bar shown on the activity, topic and contribution screens.
-    function renderWhoBars() {
-      document.querySelectorAll(".who").forEach(function (bar) {
+    // Bar at the top of every screen after sign-in: Main menu · who is contributing · switch person.
+    function renderAppBars() {
+      document.querySelectorAll(".appbar").forEach(function (bar) {
         bar.textContent = "";
         if (!contributor) return;
+        if (!bar.hasAttribute("data-home")) {
+          const menu = document.createElement("button");
+          menu.type = "button";
+          menu.className = "secondary menu-btn";
+          setBi(menu, "☰ Main menu", "مینو");
+          menu.addEventListener("click", function () { if (!pending) showMode(); });
+          bar.appendChild(menu);
+        }
         const who = document.createElement("span");
+        who.className = "who-text";
         const label = document.createElement("span");
         label.className = "inline-bi";
+        setBi(label, "Contributing as", "حصہ لینے والے");
         const strong = document.createElement("strong");
         strong.textContent = displayName(contributor) + (contributor.name ? " (" + contributor.id + ")" : "");
-        setBi(label, "Contributing as", "حصہ لینے والے");
         who.appendChild(label);
         who.appendChild(document.createTextNode(": "));
         who.appendChild(strong);
@@ -665,7 +791,7 @@
         inner.className = "inline-bi";
         setBi(inner, "Not you? Switch person", "آپ نہیں ہیں؟ شخص تبدیل کریں");
         button.appendChild(inner);
-        button.addEventListener("click", showPicker);
+        button.addEventListener("click", function () { if (!pending) showPicker(); });
         bar.appendChild(who);
         bar.appendChild(button);
       });
@@ -748,7 +874,7 @@
     function showMode() {
       if (!contributor) { showStart(); return; }
       clearRecording();
-      renderWhoBars();
+      renderAppBars();
       show("modeCard");
     }
 
@@ -768,6 +894,31 @@
       if (pending) clearTimeout(pending.timer);
       pending = null;
     }
+    // While an upload is running, keep the volunteer informed; never leave them guessing.
+    let uploadWatch = null;
+    function startUploadWatch(box, bytes) {
+      stopUploadWatch();
+      const started = Date.now();
+      const mb = (bytes / (1024 * 1024)).toFixed(1);
+      const tick = function () {
+        const secs = Math.round((Date.now() - started) / 1000);
+        if (Date.now() - started < SLOW_NOTICE_AFTER_MS) {
+          setStatus(box, "info", "Uploading your recording (" + mb + " MB)… please keep this page open.",
+            "آپ کی ریکارڈنگ اپلوڈ ہو رہی ہے (" + mb + " ایم بی)… براہِ کرم یہ صفحہ کھلا رکھیں۔");
+        } else {
+          setStatus(box, "bad",
+            "Your internet connection seems slow or weak. The upload is still going (" + secs + " seconds). Please keep this page open.",
+            "آپ کا انٹرنیٹ کنکشن سست یا کمزور لگتا ہے۔ اپلوڈ ابھی جاری ہے (" + secs + " سیکنڈ)۔ براہِ کرم یہ صفحہ کھلا رکھیں۔");
+        }
+      };
+      tick();
+      uploadWatch = setInterval(tick, 1000);
+    }
+    function stopUploadWatch() {
+      if (uploadWatch) clearInterval(uploadWatch);
+      uploadWatch = null;
+    }
+
     function isTrustedBackendOrigin(origin) {
       return /^https:\/\/([a-z0-9-]+\.)*googleusercontent\.com$/.test(origin) ||
              origin === "https://script.google.com";
@@ -780,8 +931,10 @@
       const kind = pending.kind;
       clearPending();
       const result = event.data.data || {};
+      stopUploadWatch();
       if (kind === "register") handleRegistrationResult(result);
       else if (kind === "contribute") handleContributionResult(result);
+      else if (kind === "creative") handleCreativeResult(result);
       else if (kind === "requestLink") handleLinkRequestResult(result);
       else if (kind === "prompts") handlePromptsResult(result);
     });
@@ -901,7 +1054,7 @@
     const promptState = { forId: null, domains: [], byDomain: {}, done: new Set(), skipped: new Set(), domain: null, current: null };
 
     function showDomainCardLoading() {
-      renderWhoBars();
+      renderAppBars();
       $("domainList").textContent = "";
       setStatus($("domainStatus"), "info", "Loading…", "لوڈ ہو رہا ہے…");
       show("domainCard");
@@ -939,8 +1092,32 @@
       return (promptState.byDomain[code] || []).filter(function (p) { return promptState.done.has(p.id); }).length;
     }
 
+    const MIXED = "*MIXED*";
+
+    function allPrompts() {
+      let list = [];
+      promptState.domains.forEach(function (d) { list = list.concat(promptState.byDomain[d.code] || []); });
+      return list;
+    }
+
+    // Random choice that favours prompts few people have recorded; numbers 1–200 carry extra weight.
+    function pickPrompt(candidates) {
+      let total = 0;
+      const weights = candidates.map(function (p) {
+        const w = (Number(p.w) || 1) / (1 + (Number(p.c) || 0));
+        total += w;
+        return w;
+      });
+      let r = Math.random() * total;
+      for (let i = 0; i < candidates.length; i++) {
+        r -= weights[i];
+        if (r <= 0) return candidates[i];
+      }
+      return candidates[candidates.length - 1];
+    }
+
     function renderDomains() {
-      renderWhoBars();
+      renderAppBars();
       const list = $("domainList");
       list.textContent = "";
       if (!promptState.domains.length) {
@@ -951,6 +1128,22 @@
         return;
       }
       setStatus($("domainStatus"), "", "");
+      const everything = allPrompts();
+      const doneAll = everything.filter(function (p) { return promptState.done.has(p.id); }).length;
+      const mixedLi = document.createElement("li");
+      const mixed = document.createElement("button");
+      mixed.type = "button";
+      mixed.className = "choice";
+      mixed.setAttribute("data-domain", MIXED);
+      const men = document.createElement("span"); men.className = "en"; men.textContent = "🎲 Mixed: surprise me";
+      const mur = document.createElement("span"); mur.className = "ur"; mur.lang = "ur"; mur.textContent = "ملا جلا: کوئی بھی لفظ یا جملہ";
+      const mmeta = document.createElement("span"); mmeta.className = "meta";
+      setBi(mmeta, "From all topics, in random order · " + doneAll + " of " + everything.length + " done",
+        "سب موضوعات سے، کسی بھی ترتیب میں · " + everything.length + " میں سے " + doneAll + " مکمل");
+      mixed.appendChild(men); mixed.appendChild(mur); mixed.appendChild(mmeta);
+      mixed.addEventListener("click", function () { startDomain(MIXED); });
+      mixedLi.appendChild(mixed);
+      list.appendChild(mixedLi);
       promptState.domains.forEach(function (d) {
         const total = (promptState.byDomain[d.code] || []).length;
         const done = doneCount(d.code);
@@ -979,6 +1172,7 @@
     }
 
     function domainInfo(code) {
+      if (code === MIXED) return { code: MIXED, en: "Mixed", ur: "ملا جلا" };
       for (let i = 0; i < promptState.domains.length; i++) if (promptState.domains[i].code === code) return promptState.domains[i];
       return { code: code, en: code, ur: "" };
     }
@@ -988,16 +1182,29 @@
       nextPrompt();
     }
 
+    function promptsIn(code) {
+      return code === MIXED ? allPrompts() : (promptState.byDomain[code] || []);
+    }
+
     function nextPrompt() {
       const code = promptState.domain;
-      const all = promptState.byDomain[code] || [];
+      const all = promptsIn(code);
       const remaining = all.filter(function (p) { return !promptState.done.has(p.id) && !promptState.skipped.has(p.id); });
       if (!remaining.length) { showTopicDone(); return; }
-      promptState.current = remaining[0];
-      const d = domainInfo(code);
+      if (code === MIXED) {
+        // Mixed: first a random topic (so no single large topic dominates), then a prompt in it.
+        const byTopic = {};
+        remaining.forEach(function (p) { (byTopic[p.d] = byTopic[p.d] || []).push(p); });
+        const topicCodes = Object.keys(byTopic);
+        promptState.current = pickPrompt(byTopic[topicCodes[Math.floor(Math.random() * topicCodes.length)]]);
+      } else {
+        promptState.current = pickPrompt(remaining);
+      }
       const p = promptState.current;
-      $("promptTopic").textContent = d.en + " · " + d.ur;
-      $("promptProgress").textContent = (doneCount(code) + 1) + " / " + all.length;
+      const d = domainInfo(code === MIXED ? p.d : code);
+      const done = all.filter(function (x) { return promptState.done.has(x.id); }).length;
+      $("promptTopic").textContent = (code === MIXED ? "🎲 Mixed · ملا جلا — " : "") + d.en + " · " + d.ur;
+      $("promptProgress").textContent = done + " / " + all.length + " ✓";
       $("promptEn").textContent = p.en;
       $("promptUr").textContent = p.ur;
       const note = String(p.n || "");
@@ -1010,7 +1217,7 @@
     function showTopicDone() {
       const code = promptState.domain;
       const d = domainInfo(code);
-      const skippedHere = (promptState.byDomain[code] || []).filter(function (p) { return promptState.skipped.has(p.id) && !promptState.done.has(p.id); });
+      const skippedHere = promptsIn(code).filter(function (p) { return promptState.skipped.has(p.id) && !promptState.done.has(p.id); });
       setBi($("topicDoneText"),
         skippedHere.length
           ? "You have gone through every item in \"" + d.en + "\". You skipped " + skippedHere.length + "."
@@ -1024,10 +1231,11 @@
     }
 
     $("showSkippedButton").addEventListener("click", function () {
-      (promptState.byDomain[promptState.domain] || []).forEach(function (p) { promptState.skipped.delete(p.id); });
+      promptsIn(promptState.domain).forEach(function (p) { promptState.skipped.delete(p.id); });
       nextPrompt();
     });
     $("topicDoneChooseButton").addEventListener("click", showDomains);
+    $("topicDoneMenuButton").addEventListener("click", showMode);
 
     $("skipButton").addEventListener("click", function () {
       if (pending || !promptState.current) return;
@@ -1042,6 +1250,23 @@
     const discardButton = $("discardButton");
     const recState = $("recState");
     const playback = $("playback");
+
+    let maxRecordSeconds = 60, recordBitrate = 96000;
+
+    // One recorder, moved into whichever form is open.
+    function placeRecorder(slotId, maxSeconds, bitrate) {
+      clearRecording();
+      $(slotId).appendChild($("recorderBox"));
+      maxRecordSeconds = maxSeconds;
+      recordBitrate = bitrate;
+      if (maxSeconds >= 120) {
+        setBi($("recorderHint"), "Recite it clearly, in a quiet place. Maximum " + Math.round(maxSeconds / 60) + " minutes.",
+          "کسی پرسکون جگہ پر صاف آواز میں پڑھیں۔ زیادہ سے زیادہ " + Math.round(maxSeconds / 60) + " منٹ۔");
+      } else {
+        setBi($("recorderHint"), "Say it clearly, in a quiet place. Maximum " + maxSeconds + " seconds.",
+          "کسی پرسکون جگہ پر صاف آواز میں بولیں۔ زیادہ سے زیادہ " + maxSeconds + " سیکنڈ۔");
+      }
+    }
 
     let mediaRecorder = null, mediaStream = null, chunks = [];
     let recording = null;            // { blob, mime, seconds }
@@ -1076,7 +1301,7 @@
         return;
       }
       const mime = pickMimeType();
-      const options = { audioBitsPerSecond: 96000 };
+      const options = { audioBitsPerSecond: recordBitrate };
       if (mime) options.mimeType = mime;
       try {
         mediaRecorder = new MediaRecorder(mediaStream, options);
@@ -1099,7 +1324,7 @@
       };
       tick();
       recTick = setInterval(tick, 500);
-      recAutoStop = setTimeout(stopRecording, MAX_RECORD_SECONDS * 1000);
+      recAutoStop = setTimeout(stopRecording, maxRecordSeconds * 1000);
     });
 
     function stopRecording() {
@@ -1127,6 +1352,9 @@
         return;
       }
       recording = { blob: blob, mime: type.split(";")[0].trim().toLowerCase(), seconds: Math.round(seconds * 10) / 10 };
+      ["conStatus", "creativeStatus"].forEach(function (id) {
+        if ($(id).classList.contains("bad")) setStatus($(id), "", "");
+      });
       if (playback.src) URL.revokeObjectURL(playback.src);
       playback.src = URL.createObjectURL(blob);
       playback.classList.remove("hidden");
@@ -1177,14 +1405,15 @@
       $("promptIntro").classList.toggle("hidden", !isPrompt);
       $("meaningSection").classList.toggle("hidden", isPrompt);
       $("skipButton").classList.toggle("hidden", !isPrompt);
+      $("contributionBackButton").classList.toggle("hidden", !isPrompt);
+      placeRecorder("ownRecorderSlot", 60, 96000);
       const back = $("contributionBackButton");
       back.textContent = "";
       const inner = document.createElement("span");
       inner.className = "inline-bi";
-      if (isPrompt) setBi(inner, "← Topics", "موضوعات");
-      else setBi(inner, "← Activities", "سرگرمیاں");
+      setBi(inner, "← Topics", "موضوعات");
       back.appendChild(inner);
-      renderWhoBars();
+      renderAppBars();
       $("contributionLink").value = personalLink(contributor);
       setStatus(conStatus, "", "");
       resetContributionForm();
@@ -1260,13 +1489,15 @@
       $("conElapsedMs").value = String(Math.max(Date.now() - conOpenedAt, 3000));
 
       startPending("contribute", UPLOAD_TIMEOUT_MS, function () {
+        stopUploadWatch();
         resetContributeButton();
         setStatus(conStatus, "bad",
-          "We did not receive a confirmation from the server. Please check your internet connection. " +
-          "Your entry may already have been saved, so wait a minute before submitting it again.",
-          "سرور سے تصدیق موصول نہیں ہوئی۔ اپنا انٹرنیٹ کنکشن چیک کریں۔ ہو سکتا ہے آپ کا اندراج محفوظ ہو چکا ہو، " +
-          "اس لیے دوبارہ بھیجنے سے پہلے ایک منٹ انتظار کریں۔");
+          "The upload did not finish: your internet connection is too slow or weak right now. " +
+          "Your entry may already have been saved, so please wait a minute, then try again.",
+          "اپلوڈ مکمل نہیں ہو سکا: اس وقت آپ کا انٹرنیٹ کنکشن بہت سست یا کمزور ہے۔ " +
+          "ہو سکتا ہے آپ کا اندراج محفوظ ہو چکا ہو، اس لیے ایک منٹ انتظار کر کے دوبارہ کوشش کریں۔");
       });
+      startUploadWatch(conStatus, recording.blob.size);
       conForm.submit();
     });
 
@@ -1278,6 +1509,7 @@
         const already = !result.success && /already recorded/i.test(result.message || "");
         if (result.success || already) {
           promptState.done.add(promptState.current.id);
+          if (result.success) promptState.current.c = (Number(promptState.current.c) || 0) + 1;
           nextPrompt();
           setStatus(conStatus, "good",
             already ? "You had already recorded that one. Here is the next." : "Saved ✓ " + (result.contributionId || "") + ". Here is the next one.",
@@ -1305,16 +1537,114 @@
       loadPrompts();
     });
     $("modeOwnButton").addEventListener("click", function () { openContribution("own"); });
-    $("domainBackButton").addEventListener("click", showMode);
+    $("modeCreativeButton").addEventListener("click", openCreative);
     $("contributionBackButton").addEventListener("click", function () {
       if (pending) return;
-      if (conMode === "prompt") showDomains(); else showMode();
+      showDomains();
     });
     $("anotherButton").addEventListener("click", function () { openContribution("own"); });
     $("savedModeButton").addEventListener("click", showMode);
     $("savedSwitchButton").addEventListener("click", showPicker);
     $("addPersonButton").addEventListener("click", showRegistration);
     $("backToListButton").addEventListener("click", showPicker);
+
+    /* ---------- Creative writing ---------- */
+
+    const crForm = $("creativeForm");
+    const crButton = $("creativeButton");
+    const crStatus = $("creativeStatus");
+    let crOpenedAt = Date.now();
+
+    function resetCreativeButton() {
+      crButton.disabled = false;
+      setBi(crButton, "Submit my piece", "میری تحریر جمع کریں");
+    }
+
+    function updateCreativeChoices() {
+      const authorship = (crForm.querySelector("input[name=authorship]:checked") || {}).value;
+      const own = authorship !== "TRADITIONAL";
+      $("penNameField").classList.toggle("hidden", authorship !== "OWN_WORK");
+      if (own) setBi($("publishLabel"), "It may be published, credited to me (by name or pen name) as the author.",
+        "اسے شائع کیا جا سکتا ہے، اور مصنف کے طور پر میرا نام (یا قلمی نام) دیا جائے۔");
+      else setBi($("publishLabel"), "It may be published, credited to me as the reciter / narrator.",
+        "اسے شائع کیا جا سکتا ہے، اور پڑھنے یا سنانے والے کے طور پر میرا نام دیا جائے۔");
+    }
+    crForm.querySelectorAll("input[name=authorship]").forEach(function (r) { r.addEventListener("change", updateCreativeChoices); });
+
+    function openCreative() {
+      if (!contributor) { showStart(); return; }
+      renderAppBars();
+      crForm.reset();
+      $("crAudioData").value = ""; $("crAudioData").disabled = true; $("crHasAudio").value = "no";
+      placeRecorder("creativeRecorderSlot", 600, 64000);
+      updateCreativeChoices();
+      setStatus(crStatus, "", "");
+      resetCreativeButton();
+      crOpenedAt = Date.now();
+      show("creativeCard");
+    }
+
+    crForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      if (pending) return;
+      if (!contributor) { showStart(); return; }
+      const bad = function (en, ur) { setStatus(crStatus, "bad", en, ur); };
+      if (!$("genre").value) return bad("Please choose the type of writing.", "براہِ کرم تحریر کی قسم منتخب کریں۔");
+      if (!$("crTitle").value.trim()) return bad("Please give your piece a title.", "براہِ کرم اپنی تحریر کا عنوان لکھیں۔");
+      if (!$("crTextUrdu").value.trim() && !$("crTextRoman").value.trim() && !$("crTextTibetan").value.trim()) {
+        return bad("Please write the text of your piece in at least one script.", "براہِ کرم اپنی تحریر کا متن کم از کم ایک رسم الخط میں لکھیں۔");
+      }
+      if (!crForm.querySelector("input[name=authorship]:checked")) {
+        return bad("Please say whether this is your own work or a traditional piece.", "براہِ کرم بتائیں کہ یہ آپ کی اپنی تخلیق ہے یا روایتی۔");
+      }
+      if (!crForm.querySelector("input[name=publication]:checked")) {
+        return bad("Please choose how your piece may be used.", "براہِ کرم منتخب کریں کہ آپ کی تحریر کس طرح استعمال ہو سکتی ہے۔");
+      }
+      if (mediaRecorder) return bad("Please stop the recording before submitting.", "جمع کرنے سے پہلے ریکارڈنگ روکیں۔");
+      if (!recording) return bad("Please record yourself reciting the piece.", "براہِ کرم اپنی تحریر پڑھ کر ریکارڈ کریں۔");
+
+      crButton.disabled = true;
+      setBi(crButton, "Uploading…", "اپلوڈ ہو رہا ہے…");
+      $("crContributorId").value = contributor.id;
+      $("crAccessKey").value = contributor.key;
+      try {
+        $("crAudioData").value = await blobToBase64(recording.blob);
+      } catch (e) {
+        resetCreativeButton();
+        return bad("The recording could not be prepared. Please record it again.", "ریکارڈنگ تیار نہیں ہو سکی۔ براہِ کرم دوبارہ ریکارڈ کریں۔");
+      }
+      $("crAudioData").disabled = false;
+      $("crHasAudio").value = "yes";
+      $("crAudioMime").value = recording.mime;
+      $("crAudioDuration").value = String(recording.seconds);
+      $("crElapsedMs").value = String(Math.max(Date.now() - crOpenedAt, 3000));
+      startPending("creative", CREATIVE_UPLOAD_TIMEOUT_MS, function () {
+        stopUploadWatch();
+        resetCreativeButton();
+        bad("The upload did not finish: your internet connection is too slow or weak right now. " +
+            "Your piece may already have been saved, so please wait a few minutes before trying again.",
+            "اپلوڈ مکمل نہیں ہو سکا: اس وقت آپ کا انٹرنیٹ کنکشن بہت سست یا کمزور ہے۔ " +
+            "ہو سکتا ہے آپ کی تحریر محفوظ ہو چکی ہو، اس لیے دوبارہ کوشش سے پہلے چند منٹ انتظار کریں۔");
+      });
+      startUploadWatch(crStatus, recording.blob.size);
+      crForm.submit();
+    });
+
+    function handleCreativeResult(result) {
+      resetCreativeButton();
+      $("crAudioData").value = ""; $("crAudioData").disabled = true;
+      if (result.success) {
+        $("creativeSavedId").textContent = result.workId || "";
+        clearRecording();
+        show("creativeSavedCard");
+      } else {
+        setStatus(crStatus, "bad", result.message ||
+          biText("Your piece could not be saved. Please try again.", "آپ کی تحریر محفوظ نہیں ہو سکی۔ براہِ کرم دوبارہ کوشش کریں۔"));
+      }
+    }
+
+    $("creativeAnotherButton").addEventListener("click", openCreative);
+    $("creativeMenuButton").addEventListener("click", showMode);
 
     /* ---------- Copy buttons ---------- */
 

@@ -536,6 +536,28 @@
           <label>Leave this field empty <input name="website" tabindex="-1" autocomplete="off"></label>
         </div>
 
+        <h3 style="margin-top:4px"><span class="en">Before you start</span><span class="ur" lang="ur">شروع کرنے سے پہلے</span></h3>
+        <fieldset class="consent-choice">
+          <legend><span class="en">Whose work is this? <span class="required">*</span></span><span class="ur" lang="ur">یہ کس کی تخلیق ہے؟ <span class="required">*</span></span></legend>
+          <label><input type="radio" name="authorship" value="OWN_WORK">
+            <span><span class="en">My own work. I am the author.</span><span class="ur" lang="ur">یہ میری اپنی تخلیق ہے۔ میں اس کا مصنف ہوں۔</span></span></label>
+          <label><input type="radio" name="authorship" value="TRADITIONAL">
+            <span><span class="en">Traditional / folk. I am reciting or narrating it.</span><span class="ur" lang="ur">یہ روایتی یا لوک تخلیق ہے۔ میں اسے پڑھ کر یا بیان کر کے سنا رہا ہوں۔</span></span></label>
+        </fieldset>
+        <div class="field hidden" id="penNameField">
+          <label for="crPenName"><span class="en">Pen name / takhallus (optional)</span><span class="ur" lang="ur">قلمی نام / تخلص (اختیاری)</span></label>
+          <input id="crPenName" name="penName" maxlength="80" dir="auto">
+        </div>
+
+        <fieldset class="consent-choice">
+          <legend><span class="en">How may this piece be used? <span class="required">*</span></span><span class="ur" lang="ur">یہ تحریر کس طرح استعمال ہو سکتی ہے؟ <span class="required">*</span></span></legend>
+          <label><input type="radio" name="publication" value="RESEARCH_ONLY">
+            <span><span class="en">For research only. Do not publish it.</span><span class="ur" lang="ur">صرف تحقیق کے لیے۔ اسے شائع نہ کیا جائے۔</span></span></label>
+          <label><input type="radio" name="publication" value="PUBLISH_WITH_CREDIT">
+            <span id="publishLabel"></span></label>
+        </fieldset>
+
+        <h3><span class="en">Your piece</span><span class="ur" lang="ur">آپ کی تحریر</span></h3>
         <div class="grid">
           <div class="field">
             <label for="genre"><span class="en">Type of writing <span class="required">*</span></span><span class="ur" lang="ur">تحریر کی قسم <span class="required">*</span></span></label>
@@ -578,25 +600,6 @@
           <textarea id="crSummary" name="summary" dir="auto" maxlength="45000"></textarea>
         </div>
 
-        <fieldset class="consent-choice">
-          <legend><span class="en">Whose work is this? <span class="required">*</span></span><span class="ur" lang="ur">یہ کس کی تخلیق ہے؟ <span class="required">*</span></span></legend>
-          <label><input type="radio" name="authorship" value="OWN_WORK">
-            <span><span class="en">My own work. I am the author.</span><span class="ur" lang="ur">یہ میری اپنی تخلیق ہے۔ میں اس کا مصنف ہوں۔</span></span></label>
-          <label><input type="radio" name="authorship" value="TRADITIONAL">
-            <span><span class="en">Traditional / folk. I am reciting or narrating it.</span><span class="ur" lang="ur">یہ روایتی یا لوک تخلیق ہے۔ میں اسے پڑھ کر یا بیان کر کے سنا رہا ہوں۔</span></span></label>
-        </fieldset>
-        <div class="field hidden" id="penNameField">
-          <label for="crPenName"><span class="en">Pen name / takhallus (optional)</span><span class="ur" lang="ur">قلمی نام / تخلص (اختیاری)</span></label>
-          <input id="crPenName" name="penName" maxlength="80" dir="auto">
-        </div>
-
-        <fieldset class="consent-choice">
-          <legend><span class="en">How may this piece be used? <span class="required">*</span></span><span class="ur" lang="ur">یہ تحریر کس طرح استعمال ہو سکتی ہے؟ <span class="required">*</span></span></legend>
-          <label><input type="radio" name="publication" value="RESEARCH_ONLY">
-            <span><span class="en">For research only. Do not publish it.</span><span class="ur" lang="ur">صرف تحقیق کے لیے۔ اسے شائع نہ کیا جائے۔</span></span></label>
-          <label><input type="radio" name="publication" value="PUBLISH_WITH_CREDIT">
-            <span id="publishLabel"></span></label>
-        </fieldset>
 
         <h3><span class="en">Recitation <span class="required">*</span></span><span class="ur" lang="ur">پڑھ کر سنائیں <span class="required">*</span></span></h3>
         <div id="creativeRecorderSlot"></div>
@@ -1589,16 +1592,16 @@
       if (pending) return;
       if (!contributor) { showStart(); return; }
       const bad = function (en, ur) { setStatus(crStatus, "bad", en, ur); };
-      if (!$("genre").value) return bad("Please choose the type of writing.", "براہِ کرم تحریر کی قسم منتخب کریں۔");
-      if (!$("crTitle").value.trim()) return bad("Please give your piece a title.", "براہِ کرم اپنی تحریر کا عنوان لکھیں۔");
-      if (!$("crTextUrdu").value.trim() && !$("crTextRoman").value.trim() && !$("crTextTibetan").value.trim()) {
-        return bad("Please write the text of your piece in at least one script.", "براہِ کرم اپنی تحریر کا متن کم از کم ایک رسم الخط میں لکھیں۔");
-      }
       if (!crForm.querySelector("input[name=authorship]:checked")) {
         return bad("Please say whether this is your own work or a traditional piece.", "براہِ کرم بتائیں کہ یہ آپ کی اپنی تخلیق ہے یا روایتی۔");
       }
       if (!crForm.querySelector("input[name=publication]:checked")) {
         return bad("Please choose how your piece may be used.", "براہِ کرم منتخب کریں کہ آپ کی تحریر کس طرح استعمال ہو سکتی ہے۔");
+      }
+      if (!$("genre").value) return bad("Please choose the type of writing.", "براہِ کرم تحریر کی قسم منتخب کریں۔");
+      if (!$("crTitle").value.trim()) return bad("Please give your piece a title.", "براہِ کرم اپنی تحریر کا عنوان لکھیں۔");
+      if (!$("crTextUrdu").value.trim() && !$("crTextRoman").value.trim() && !$("crTextTibetan").value.trim()) {
+        return bad("Please write the text of your piece in at least one script.", "براہِ کرم اپنی تحریر کا متن کم از کم ایک رسم الخط میں لکھیں۔");
       }
       if (mediaRecorder) return bad("Please stop the recording before submitting.", "جمع کرنے سے پہلے ریکارڈنگ روکیں۔");
       if (!recording) return bad("Please record yourself reciting the piece.", "براہِ کرم اپنی تحریر پڑھ کر ریکارڈ کریں۔");
